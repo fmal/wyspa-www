@@ -27,10 +27,10 @@
     "dotenv": "~8.2.0",
     "eslint": "~6.8.0",
     "eslint-config-fmal": "~7.0.0",
-    "eslint-loader": "~4.0.2",
     "eslint-plugin-jsx-a11y": "~6.2.3",
     "eslint-plugin-react": "~7.20.0",
-    "gatsby-plugin-eslint": "~2.0.8",
+    "husky": "~4.2.5",
+    "lint-staged": "~10.2.9",
     "postcss-preset-env": "~6.7.0",
     "prettier": "2.0.5",
     "tailwindcss": "~1.4.6"
@@ -44,13 +44,21 @@
     "build:incremental": "cross-env GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build --log-pages",
     "develop": "gatsby develop",
     "develop:playground": "cross-env GATSBY_GRAPHQL_IDE=playground gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
     "lint": "eslint . --cache --ignore-path .gitignore",
     "lint:fix": "npm run lint -- --fix",
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix"
   },
   "repository": {
     "type": "git",

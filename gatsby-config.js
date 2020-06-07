@@ -14,12 +14,6 @@ module.exports = {
     author: '@gatsbyjs'
   },
   plugins: [
-    {
-      resolve: 'gatsby-plugin-eslint',
-      options: {
-        stages: ['build-javascript']
-      }
-    },
     'gatsby-plugin-postcss',
     {
       resolve: '@directus/gatsby-source-directus',
