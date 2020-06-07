@@ -50,6 +50,7 @@ jobs:
           GATSBY_TELEMETRY_DISABLED: 1
           NODE_ENV: production
           GATSBY_ACTIVE_ENV: ${{ contains(github.ref, 'master') && 'production' || 'staging'}}
+          DIRECTUS_API_TOKEN: ${{ secrets.DIRECTUS_API_TOKEN }}
 
       - name: Deploy preview site
         if: github.ref != 'refs/heads/master'
