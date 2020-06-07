@@ -1,0 +1,68 @@
+name: CI-CD
+
+on:
+  push:
+  pull_request:
+  repository_dispatch:
+    types: deploy
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12
+
+      - name: NPM cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-packages-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-packages-
+
+      # In order to make gatsby incremental build works, it's necessary .cache
+      # and public folder.
+      - name: Gatsby cache folder
+        uses: actions/cache@v2
+        with:
+          path: .cache
+          key: gatsby-cache
+
+      - name: Gatsby public folder
+        uses: actions/cache@v2
+        with:
+          path: public
+          key: gatsby-public
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Build Gatsby
+        run: npm run build -- --log-pages
+        env:
+          # incremental builds
+          # https://www.gatsbyjs.org/docs/page-build-optimizations-for-incremental-data-changes/
+          GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES: true
+          GATSBY_TELEMETRY_DISABLED: 1
+          NODE_ENV: production
+          GATSBY_ACTIVE_ENV: ${{ contains(github.ref, 'master') && 'production' || 'staging'}}
+
+      - name: Deploy preview site
+        if: github.ref != 'refs/heads/master'
+        run: |
+          npx netlify-cli deploy --dir public
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Deploy production site
+        if: github.ref == 'refs/heads/master'
+        run: |
+          npx netlify-cli deploy --dir public --prod
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
