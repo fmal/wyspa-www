@@ -1,5 +1,3 @@
-import './src/css/index.css';
-
 import React from 'react';
 
 import IsStaticProvider from './src/providers/IsStatic';

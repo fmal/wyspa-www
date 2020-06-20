@@ -7,25 +7,17 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStaticQuery, graphql } from 'gatsby';
 
-import Header from './header';
+import Header from './Header';
+import useConfig from '../hooks/useConfig';
 
 const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `);
+  const { site } = useConfig();
 
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <div className="container mx-auto px-4 py-6">
+      <Header siteTitle={site.siteMetadata.title} />
+      <div className="container px-4 py-6 mx-auto">
         <main>{children}</main>
       </div>
     </>

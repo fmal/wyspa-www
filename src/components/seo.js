@@ -8,22 +8,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { useStaticQuery, graphql } from 'gatsby';
+
+import useConfig from '../hooks/useConfig';
 
 function SEO({ description, lang, meta, title }) {
-  const { site } = useStaticQuery(
-    graphql`
-      query {
-        site {
-          siteMetadata {
-            title
-            description
-            author
-          }
-        }
-      }
-    `
-  );
+  const { site } = useConfig();
 
   const metaDescription = description || site.siteMetadata.description;
 
@@ -73,9 +62,9 @@ function SEO({ description, lang, meta, title }) {
 }
 
 SEO.defaultProps = {
-  lang: `en`,
+  lang: 'pl',
   meta: [],
-  description: ``
+  description: ''
 };
 
 SEO.propTypes = {
