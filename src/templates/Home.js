@@ -8,7 +8,7 @@ import LocalizedLink from '../components/LocalizedLink';
 
 const Home = ({ data }) => {
   const {
-    allDirectusCategory: { edges: categories = [] }
+    allDirectusCategory: { nodes: categories = [] }
   } = data;
 
   const { t } = useTranslation('home');
@@ -18,7 +18,7 @@ const Home = ({ data }) => {
       <SEO title={t('title')} />
       <h1 className="m-0 text-xl">{t('title')}</h1>
       <ul className="mt-4">
-        {categories.map(({ node: category }) => (
+        {categories.map(category => (
           <li key={category.id}>
             <LocalizedLink
               className="text-blue-700"
@@ -36,15 +36,29 @@ const Home = ({ data }) => {
 export const query = graphql`
   query CategoriesQuery($language: String!) {
     allDirectusCategory(
-      filter: { translations: { elemMatch: { language: { eq: $language } } } }
+      sort: { fields: [order, created_date], order: [ASC, DESC] }
+      filter: {
+        show_on_home: { eq: true }
+        translations: { elemMatch: { language: { eq: $language } } }
+      }
     ) {
-      edges {
-        node {
-          id
-          translations {
-            language
-            name
-            slug
+      nodes {
+        id
+        translations {
+          language
+          name
+          slug
+        }
+        lastEvent {
+          featured_image {
+            localFile {
+              id
+              childImageSharp {
+                fluid {
+                  ...GatsbyImageSharpFluid_withWebp
+                }
+              }
+            }
           }
         }
       }

@@ -1,8 +1,14 @@
 {
   "title": "Insytut Sztuki Wyspa",
+  "description": "Wyspa WWW.",
   "pl": "Polish",
   "en": "English",
   "language": "Language",
   "categorySlug": "category",
-  "eventSlug": "event"
+  "eventSlug": "event",
+  "pageSlug": "page",
+  "yearSlug": "year",
+  "previousPage": "← Previous Page",
+  "nextPage": "Next Page →",
+  "paginationLocation": "Page {{currentPage}} of {{pageCount}}"
 }

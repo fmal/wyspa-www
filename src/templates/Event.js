@@ -2,6 +2,7 @@ import React from 'react';
 import { graphql } from 'gatsby';
 import Img from 'gatsby-image';
 
+import localize from '../components/localize';
 import SEO from '../components/SEO';
 
 const Event = ({ data }) => {
@@ -45,13 +46,7 @@ export const query = graphql`
         localFile {
           childImageSharp {
             fluid(maxWidth: 500) {
-              base64
-              aspectRatio
-              src
-              srcSet
-              srcWebp
-              srcSetWebp
-              sizes
+              ...GatsbyImageSharpFluid_withWebp
             }
           }
         }
@@ -60,4 +55,4 @@ export const query = graphql`
   }
 `;
 
-export default Event;
+export default localize(Event);

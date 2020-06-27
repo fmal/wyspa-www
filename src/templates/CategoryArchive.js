@@ -7,29 +7,15 @@ import LocalizedLink from '../components/LocalizedLink';
 import Pagination from '../components/Pagination';
 import { useTranslation } from 'react-i18next';
 
-const Category = ({ data, pageContext }) => {
-  const { events, category, yearsGroup } = data;
-  const { currentPage, pageCount } = pageContext;
+const CategoryArchive = ({ data, pageContext }) => {
+  const { events, category } = data;
+  const { currentPage, pageCount, year } = pageContext;
   const { t } = useTranslation('category');
 
   return (
     <>
-      <SEO title={category.name} />
-      <h1 className="m-0 text-xl">{category.name}</h1>
-      <ul className="mt-4">
-        {yearsGroup.group.map(({ year, totalCount }) => (
-          <li key={year}>
-            <LocalizedLink
-              className="text-blue-700"
-              to={`/${t('common:categorySlug')}/${category.slug}/${t(
-                'common:yearSlug'
-              )}/${year}`}
-            >
-              {year} {`(${totalCount})`}
-            </LocalizedLink>
-          </li>
-        ))}
-      </ul>
+      <SEO title={`${category.name} -  ${year}`} />
+      <h1 className="m-0 text-xl">{`${category.name} -  ${year}`}</h1>
       <ul className="mt-4">
         {events.nodes.map(event => (
           <li key={event.id}>
@@ -45,15 +31,18 @@ const Category = ({ data, pageContext }) => {
       <Pagination
         currentPage={currentPage}
         pageCount={pageCount}
-        contextPage={`${t('common:categorySlug')}/${category.slug}`}
+        contextPage={`${t('common:categorySlug')}/${category.slug}/${t(
+          'common:yearSlug'
+        )}/${year}`}
       />
     </>
   );
 };
 
 export const query = graphql`
-  query CategoryPageQuery(
+  query CategoryArchivePageQuery(
     $id: String!
+    $year: Int!
     $language: String!
     $skip: Int!
     $limit: Int!
@@ -65,20 +54,10 @@ export const query = graphql`
         language
       }
     }
-    yearsGroup: allDirectusEvent(
-      filter: {
-        translations: { elemMatch: { language: { eq: $language } } }
-        categories: { elemMatch: { id: { eq: $id } } }
-      }
-    ) {
-      group(field: fields___year) {
-        year: fieldValue
-        totalCount
-      }
-    }
     events: allDirectusEvent(
       sort: { fields: created_date, order: DESC }
       filter: {
+        fields: { year: { eq: $year } }
         translations: { elemMatch: { language: { eq: $language } } }
         categories: { elemMatch: { id: { eq: $id } } }
       }
@@ -98,4 +77,4 @@ export const query = graphql`
   }
 `;
 
-export default localize(Category);
+export default localize(CategoryArchive);

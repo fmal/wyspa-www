@@ -6,8 +6,7 @@ const useConfig = () => {
       query {
         site {
           siteMetadata {
-            title
-            description
+            siteUrl
             author
           }
         }

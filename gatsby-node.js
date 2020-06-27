@@ -3,9 +3,15 @@ const path = require('path');
 const i18next = require('i18next');
 const fsBackend = require('i18next-fs-backend');
 
-const { wrapper } = require('./src/utils/gatsbyNodeHelpers');
+const {
+  wrapper,
+  getLanguagesFromTranslations,
+  mergeLanguageTranslations,
+  getAlternateLinksData
+} = require('./src/utils/gatsbyNodeHelpers');
 
 const allLanguages = ['en', 'pl'];
+const pageSize = 10;
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
@@ -26,51 +32,37 @@ const createI18nextInstance = async (language, namespaces) => {
 };
 
 const buildI18nPages = async (
-  collectionEdges,
+  collectionNodes,
   pageDefinitionCallback,
-  namespaces,
-  createPage
+  handlePageDefinitions,
+  namespaces
 ) => {
-  if (!Array.isArray(collectionEdges)) {
-    collectionEdges = [collectionEdges];
+  if (!Array.isArray(collectionNodes)) {
+    collectionNodes = [collectionNodes];
   }
 
   await Promise.all(
-    collectionEdges.map(async ({ node }) => {
+    collectionNodes.map(async node => {
       const { translations = [], ...nodeData } = node;
 
-      const translationLangs = translations.reduce(
-        (translationLangs, translation) => {
-          translationLangs[translation.language] = true;
-          return translationLangs;
-        },
-        Object.create(null)
+      const languages = getLanguagesFromTranslations(
+        translations,
+        allLanguages
       );
 
-      const filteredLanguages = allLanguages.filter(
-        language => language in translationLangs
-      );
-
-      if (filteredLanguages.length === 0) {
+      if (languages.length === 0) {
         return Promise.resolve();
       }
 
       const definitions = await Promise.all(
-        filteredLanguages.map(async language => {
+        languages.map(async language => {
           const i18n = await createI18nextInstance(language, namespaces);
 
-          const translation = translations.find(
-            translation => translation.language === language
+          const dataWithMergedTranslations = mergeLanguageTranslations(
+            nodeData,
+            language,
+            translations
           );
-          const {
-            language: _translationLang,
-            ...translationData
-          } = translation;
-
-          const dataWithMergedTranslations = {
-            ...nodeData,
-            ...translationData
-          };
 
           const res = pageDefinitionCallback(
             dataWithMergedTranslations,
@@ -83,18 +75,7 @@ const buildI18nPages = async (
         })
       );
 
-      const alternateLinks =
-        definitions.length > 1
-          ? definitions.map(d => ({
-              language: d.context.language,
-              path: d.path
-            }))
-          : [];
-
-      definitions.forEach(d => {
-        d.context.alternateLinks = alternateLinks;
-        createPage(d);
-      });
+      handlePageDefinitions(definitions);
     })
   );
 };
@@ -153,36 +134,61 @@ const build404Pages = async createPage => {
   );
 };
 
+exports.onCreateNode = ({ node, actions }) => {
+  const { createNodeField } = actions;
+
+  if (node.internal.type === 'DirectusEvent') {
+    const date = new Date(node.created_date);
+    const year = date.getFullYear();
+
+    // So we can group and sort by these
+    createNodeField({
+      name: 'year',
+      node,
+      value: year
+    });
+  }
+};
+
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage, createRedirect } = actions;
 
   await buildHomePages(createPage);
 
   const {
-    data: { categories, events }
+    data: { categories, events, eventsByCategory }
   } = await wrapper(
     graphql(`
       query StartupQuery {
         categories: allDirectusCategory {
-          edges {
-            node {
-              id
-              translations {
-                language
-                slug
-              }
+          nodes {
+            id
+            translations {
+              language
+              slug
             }
           }
         }
         events: allDirectusEvent {
-          edges {
-            node {
-              id
+          nodes {
+            id
+            translations {
+              language
+              slug
+            }
+          }
+        }
+        eventsByCategory: allDirectusEvent {
+          group(field: categories___id) {
+            nodes {
+              fields {
+                year
+              }
               translations {
                 language
-                slug
               }
             }
+            categoryId: fieldValue
           }
         }
       }
@@ -190,29 +196,127 @@ exports.createPages = async ({ graphql, actions }) => {
   );
 
   const categoryTemplate = path.resolve('src/templates/Category.js');
+  const categoryArchiveTemplate = path.resolve(
+    'src/templates/CategoryArchive.js'
+  );
+
+  const categoryEventsMap = eventsByCategory.group.reduce(
+    (categoryEventsMap, group) => {
+      categoryEventsMap[group.categoryId] = group.nodes;
+
+      return categoryEventsMap;
+    },
+    Object.create(null)
+  );
 
   await buildI18nPages(
-    categories.edges,
+    categories.nodes,
     ({ slug, id }, language, i18n) => ({
+      i18n,
       path: `/${language}/${i18n.t('common:categorySlug')}/${slug}`,
-      component: categoryTemplate,
       context: { id }
     }),
-    ['common', 'category'],
-    createPage
+    definitions => {
+      const alternateLinks = getAlternateLinksData(definitions);
+
+      definitions.forEach(({ i18n, ...definition }) => {
+        const categoryEvents = (
+          categoryEventsMap[definition.context.id] || []
+        ).filter(
+          event =>
+            event.translations.find(
+              translation =>
+                translation.language === definition.context.language
+            ) != null
+        );
+        const categoryEventsByYear = categoryEvents.reduce(
+          (eventsByYear, event) => {
+            const year = event.fields.year;
+
+            eventsByYear[year] = eventsByYear[year] || [];
+            eventsByYear[year].push(event);
+
+            return eventsByYear;
+          },
+          Object.create(null)
+        );
+        const pageCount = Math.max(
+          1,
+          Math.ceil(categoryEvents.length / pageSize)
+        );
+
+        Array.from({ length: pageCount }).forEach((_, idx) => {
+          createPage({
+            ...definition,
+            path:
+              idx === 0
+                ? definition.path
+                : `${definition.path}/${i18n.t('common:pageSlug')}/${idx + 1}`,
+            component: categoryTemplate,
+            context: {
+              ...definition.context,
+              ...(idx === 0 && { alternateLinks }),
+              limit: pageSize,
+              skip: idx * pageSize,
+              pageCount,
+              currentPage: idx + 1
+            }
+          });
+        });
+
+        Object.keys(categoryEventsByYear).forEach(year => {
+          const yearlyEvents = categoryEventsByYear[year];
+          const yearlyEventsPageCount = Math.ceil(
+            yearlyEvents.length / pageSize
+          );
+
+          Array.from({ length: yearlyEventsPageCount }).forEach((_, idx) => {
+            const path =
+              idx === 0
+                ? `${definition.path}/${i18n.t('common:yearSlug')}/${year}`
+                : `${definition.path}/${i18n.t(
+                    'common:yearSlug'
+                  )}/${year}/${i18n.t('common:pageSlug')}/${idx + 1}`;
+
+            createPage({
+              ...definition,
+              path,
+              component: categoryArchiveTemplate,
+              context: {
+                ...definition.context,
+                year: Number(year),
+                excludeInSitemap: true,
+                limit: pageSize,
+                skip: idx * pageSize,
+                pageCount: yearlyEventsPageCount,
+                currentPage: idx + 1
+              }
+            });
+          });
+        });
+      });
+    },
+    ['common', 'category']
   );
 
   const eventTemplate = path.resolve('src/templates/Event.js');
 
   await buildI18nPages(
-    events.edges,
+    events.nodes,
     ({ slug, id }, language, i18n) => ({
       path: `/${language}/${i18n.t('common:eventSlug')}/${slug}`,
       component: eventTemplate,
       context: { id }
     }),
-    ['common', 'event'],
-    createPage
+    definitions => {
+      const alternateLinks = getAlternateLinksData(definitions);
+
+      definitions.forEach(d => {
+        d.context.alternateLinks = alternateLinks;
+        createPage(d);
+      });
+    },
+    ['common', 'event']
   );
 
   await build404Pages(createPage);
@@ -220,7 +324,8 @@ exports.createPages = async ({ graphql, actions }) => {
   createRedirect({
     fromPath: '/',
     toPath: '/pl',
-    isPermanent: true
+    isPermanent: true,
+    redirectInBrowser: process.env.NODE_ENV === 'development'
   });
 
   allLanguages.forEach(language =>
@@ -231,4 +336,42 @@ exports.createPages = async ({ graphql, actions }) => {
     })
   );
   createRedirect({ fromPath: '/*', toPath: '/404', statusCode: 404 });
+};
+
+exports.createResolvers = ({ createResolvers }) => {
+  const resolvers = {
+    DirectusCategory: {
+      lastEvent: {
+        type: 'DirectusEvent',
+        resolve(source, args, context, info) {
+          return context.nodeModel.runQuery({
+            type: 'DirectusEvent',
+            query: {
+              sort: { fields: ['created_date'], order: ['DESC'] },
+              filter: {
+                categories: {
+                  elemMatch: {
+                    id: {
+                      eq: source.id
+                    }
+                  }
+                }
+              }
+            },
+            firstOnly: true
+          });
+        }
+      }
+    }
+  };
+
+  createResolvers(resolvers);
+};
+
+exports.onCreateWebpackConfig = ({ getConfig, actions }) => {
+  if (getConfig().mode === 'production') {
+    actions.setWebpackConfig({
+      devtool: false
+    });
+  }
 };

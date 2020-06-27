@@ -1,12 +1,11 @@
 import { Link } from 'gatsby';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAlternateLinks } from '../providers/AlternateLinks';
 import LocalizedLink from '../components/LocalizedLink';
 
-const Header = ({ siteTitle }) => {
+const Header = () => {
   const alternateLinks = useAlternateLinks();
   const { t, i18n } = useTranslation('common');
 
@@ -20,6 +19,7 @@ const Header = ({ siteTitle }) => {
               .map((link, i) => [
                 i > 0 && ' | ',
                 <Link
+                  key={i}
                   to={link.path}
                   className="text-gray-900"
                   hrefLang={link.language}
@@ -30,20 +30,12 @@ const Header = ({ siteTitle }) => {
         </div>
         <h1 className="m-0 text-xl">
           <LocalizedLink to="/" className="text-gray-900">
-            {siteTitle}
+            {t('title')}
           </LocalizedLink>
         </h1>
       </div>
     </header>
   );
-};
-
-Header.propTypes = {
-  siteTitle: PropTypes.string
-};
-
-Header.defaultProps = {
-  siteTitle: ''
 };
 
 export default Header;

@@ -8,21 +8,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import { useTranslation } from 'react-i18next';
 
 import useConfig from '../hooks/useConfig';
 
-function SEO({ description, lang, meta, title }) {
+function SEO({ description, meta, title, pathname }) {
+  const { t, i18n } = useTranslation('common');
   const { site } = useConfig();
 
-  const metaDescription = description || site.siteMetadata.description;
+  const metaDescription = description || t('description');
+  const canonical = pathname ? `${site.siteMetadata.siteUrl}${pathname}` : null;
 
   return (
     <Helmet
       htmlAttributes={{
-        lang
+        lang: i18n.language
       }}
       title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
+      titleTemplate={`%s | ${t('title')}`}
+      link={
+        canonical
+          ? [
+              {
+                rel: 'canonical',
+                href: canonical
+              }
+            ]
+          : []
+      }
       meta={[
         {
           name: `description`,
@@ -62,16 +75,15 @@ function SEO({ description, lang, meta, title }) {
 }
 
 SEO.defaultProps = {
-  lang: 'pl',
   meta: [],
   description: ''
 };
 
 SEO.propTypes = {
   description: PropTypes.string,
-  lang: PropTypes.string,
   meta: PropTypes.arrayOf(PropTypes.object),
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  pathname: PropTypes.string
 };
 
 export default SEO;

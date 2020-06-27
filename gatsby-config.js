@@ -18,8 +18,6 @@ const fullConfig = resolveConfig(tailwindConfig);
 
 module.exports = {
   siteMetadata: {
-    title: 'Instytut Sztuki Wyspa',
-    description: 'Wyspa WWW.',
     author: '@gatsbyjs',
     siteUrl: 'https://next.wyspa.iq.pl/'
   },
@@ -76,6 +74,7 @@ module.exports = {
               node {
                 path
                 context {
+                  excludeInSitemap
                   alternateLinks {
                     language
                     path
@@ -86,19 +85,21 @@ module.exports = {
           }
       }`,
         serialize: ({ site, allSitePage }) =>
-          allSitePage.edges.map(edge => {
-            return {
-              url: site.siteMetadata.siteUrl + edge.node.path,
-              changefreq: 'daily',
-              priority: 0.7,
-              links:
-                edge.node.context.alternateLinks &&
-                edge.node.context.alternateLinks.map(link => ({
-                  lang: link.language,
-                  url: site.siteMetadata.siteUrl + link.path
-                }))
-            };
-          })
+          allSitePage.edges
+            .filter(({ node }) => node.context.excludeInSitemap === true)
+            .map(({ node }) => {
+              return {
+                url: site.siteMetadata.siteUrl + node.path,
+                changefreq: 'daily',
+                priority: 0.7,
+                links:
+                  node.context.alternateLinks &&
+                  node.context.alternateLinks.map(link => ({
+                    lang: link.language,
+                    url: site.siteMetadata.siteUrl + link.path
+                  }))
+              };
+            })
       }
     },
     'gatsby-plugin-netlify'
