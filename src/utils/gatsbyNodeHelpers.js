@@ -42,3 +42,34 @@ exports.getAlternateLinksData = (definitions = []) =>
         path: d.path
       }))
     : [];
+
+const PAGINATION_OFFSET = 10;
+
+exports.createPaginatedPagesFactory = (createPage, i18n) => (
+  nodes,
+  pathPrefix,
+  component,
+  getPageDefinition = () => {}
+) => {
+  const pageCount = Math.max(1, Math.ceil(nodes.length / PAGINATION_OFFSET));
+
+  Array.from({ length: pageCount }).forEach((_, idx) => {
+    const pageDefinition = getPageDefinition(idx);
+
+    createPage({
+      ...pageDefinition,
+      component,
+      path:
+        idx === 0
+          ? pathPrefix
+          : `${pathPrefix}/${i18n.t('common:pageSlug')}/${idx + 1}`,
+      context: {
+        ...pageDefinition.context,
+        limit: PAGINATION_OFFSET,
+        skip: idx * PAGINATION_OFFSET,
+        pageCount,
+        currentPage: idx + 1
+      }
+    });
+  });
+};

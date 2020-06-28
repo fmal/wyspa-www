@@ -7,15 +7,17 @@ const {
   wrapper,
   getLanguagesFromTranslations,
   mergeLanguageTranslations,
-  getAlternateLinksData
+  getAlternateLinksData,
+  createPaginatedPagesFactory
 } = require('./src/utils/gatsbyNodeHelpers');
 
 const allLanguages = ['en', 'pl'];
-const pageSize = 10;
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 const srcPath = resolveApp('src');
+
+const noop = () => {};
 
 const createI18nextInstance = async (language, namespaces) => {
   const i18n = i18next.createInstance();
@@ -31,11 +33,19 @@ const createI18nextInstance = async (language, namespaces) => {
   return i18n;
 };
 
-const buildI18nPages = async (
+const templates = {
+  home: path.resolve('src/templates/Home.js'),
+  event: path.resolve('src/templates/Event.js'),
+  category: path.resolve('src/templates/Category.js'),
+  categoryArchive: path.resolve('src/templates/CategoryArchive.js'),
+  error: path.resolve('src/templates/404.js')
+};
+
+const buildI18nPageDefinitions = async (
   collectionNodes,
-  pageDefinitionCallback,
-  handlePageDefinitions,
-  namespaces
+  namespaces,
+  getPageDefinition = noop,
+  handlePageDefinitions = noop
 ) => {
   if (!Array.isArray(collectionNodes)) {
     collectionNodes = [collectionNodes];
@@ -64,7 +74,7 @@ const buildI18nPages = async (
             translations
           );
 
-          const res = pageDefinitionCallback(
+          const res = getPageDefinition(
             dataWithMergedTranslations,
             language,
             i18n
@@ -81,14 +91,12 @@ const buildI18nPages = async (
 };
 
 const buildHomePages = async createPage => {
-  const homeTemplate = path.resolve('src/templates/Home.js');
-
   const definitions = await Promise.all(
     allLanguages.map(async language => {
       const i18n = await createI18nextInstance(language, ['common', 'home']);
       const res = {
         path: '/' + language,
-        component: homeTemplate,
+        component: templates.home,
         context: {
           language,
           i18nResources: i18n.services.resourceStore.data
@@ -111,13 +119,12 @@ const buildHomePages = async createPage => {
 };
 
 const build404Pages = async createPage => {
-  const errorTemplate = path.resolve('src/templates/404.js');
   await Promise.all(
     allLanguages.map(async (language, index) => {
       const i18n = await createI18nextInstance(language, ['common', 404]);
       const res = {
         path: '/' + language + '/404',
-        component: errorTemplate,
+        component: templates.error,
         context: {
           language,
           i18nResources: i18n.services.resourceStore.data
@@ -152,8 +159,6 @@ exports.onCreateNode = ({ node, actions }) => {
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage, createRedirect } = actions;
-
-  await buildHomePages(createPage);
 
   const {
     data: { categories, events, eventsByCategory }
@@ -195,11 +200,6 @@ exports.createPages = async ({ graphql, actions }) => {
     `)
   );
 
-  const categoryTemplate = path.resolve('src/templates/Category.js');
-  const categoryArchiveTemplate = path.resolve(
-    'src/templates/CategoryArchive.js'
-  );
-
   const categoryEventsMap = eventsByCategory.group.reduce(
     (categoryEventsMap, group) => {
       categoryEventsMap[group.categoryId] = group.nodes;
@@ -209,117 +209,102 @@ exports.createPages = async ({ graphql, actions }) => {
     Object.create(null)
   );
 
-  await buildI18nPages(
-    categories.nodes,
-    ({ slug, id }, language, i18n) => ({
-      i18n,
-      path: `/${language}/${i18n.t('common:categorySlug')}/${slug}`,
-      context: { id }
-    }),
-    definitions => {
-      const alternateLinks = getAlternateLinksData(definitions);
+  await Promise.all([
+    buildHomePages(createPage),
+    buildI18nPageDefinitions(
+      categories.nodes,
+      ['common', 'category'],
+      ({ slug, id }, language, i18n) => ({
+        i18n,
+        path: `/${language}/${i18n.t('common:categorySlug')}/${slug}`,
+        context: { id }
+      }),
+      definitions => {
+        const alternateLinks = getAlternateLinksData(definitions);
 
-      definitions.forEach(({ i18n, ...definition }) => {
-        const categoryEvents = (
-          categoryEventsMap[definition.context.id] || []
-        ).filter(
-          event =>
-            event.translations.find(
-              translation =>
-                translation.language === definition.context.language
-            ) != null
-        );
-        const categoryEventsByYear = categoryEvents.reduce(
-          (eventsByYear, event) => {
-            const year = event.fields.year;
-
-            eventsByYear[year] = eventsByYear[year] || [];
-            eventsByYear[year].push(event);
-
-            return eventsByYear;
-          },
-          Object.create(null)
-        );
-        const pageCount = Math.max(
-          1,
-          Math.ceil(categoryEvents.length / pageSize)
-        );
-
-        Array.from({ length: pageCount }).forEach((_, idx) => {
-          createPage({
-            ...definition,
-            path:
-              idx === 0
-                ? definition.path
-                : `${definition.path}/${i18n.t('common:pageSlug')}/${idx + 1}`,
-            component: categoryTemplate,
-            context: {
-              ...definition.context,
-              ...(idx === 0 && { alternateLinks }),
-              limit: pageSize,
-              skip: idx * pageSize,
-              pageCount,
-              currentPage: idx + 1
-            }
-          });
-        });
-
-        Object.keys(categoryEventsByYear).forEach(year => {
-          const yearlyEvents = categoryEventsByYear[year];
-          const yearlyEventsPageCount = Math.ceil(
-            yearlyEvents.length / pageSize
+        definitions.forEach(({ i18n, ...definition }) => {
+          const createPaginatedPages = createPaginatedPagesFactory(
+            createPage,
+            i18n
           );
 
-          Array.from({ length: yearlyEventsPageCount }).forEach((_, idx) => {
-            const path =
-              idx === 0
-                ? `${definition.path}/${i18n.t('common:yearSlug')}/${year}`
-                : `${definition.path}/${i18n.t(
-                    'common:yearSlug'
-                  )}/${year}/${i18n.t('common:pageSlug')}/${idx + 1}`;
+          const categoryEvents = (
+            categoryEventsMap[definition.context.id] || []
+          ).filter(
+            event =>
+              event.translations.find(
+                translation =>
+                  translation.language === definition.context.language
+              ) != null
+          );
 
-            createPage({
-              ...definition,
-              path,
-              component: categoryArchiveTemplate,
-              context: {
-                ...definition.context,
-                year: Number(year),
-                excludeInSitemap: true,
-                limit: pageSize,
-                skip: idx * pageSize,
-                pageCount: yearlyEventsPageCount,
-                currentPage: idx + 1
-              }
-            });
+          createPaginatedPages(
+            categoryEvents,
+            definition.path,
+            templates.category,
+            idx =>
+              idx === 0
+                ? {
+                    ...definition,
+                    context: {
+                      ...definition.context,
+                      alternateLinks
+                    }
+                  }
+                : definition
+          );
+
+          const categoryEventsByYear = categoryEvents.reduce(
+            (eventsByYear, event) => {
+              const year = event.fields.year;
+
+              eventsByYear[year] = eventsByYear[year] || [];
+              eventsByYear[year].push(event);
+
+              return eventsByYear;
+            },
+            Object.create(null)
+          );
+
+          Object.keys(categoryEventsByYear).forEach(year => {
+            const yearlyEvents = categoryEventsByYear[year];
+
+            createPaginatedPages(
+              yearlyEvents,
+              `${definition.path}/${i18n.t('common:yearSlug')}/${year}`,
+              templates.categoryArchive,
+              () => ({
+                ...definition,
+                context: {
+                  ...definition.context,
+                  year: Number(year),
+                  excludeInSitemap: true
+                }
+              })
+            );
           });
         });
-      });
-    },
-    ['common', 'category']
-  );
+      }
+    ),
+    buildI18nPageDefinitions(
+      events.nodes,
+      ['common', 'event'],
+      ({ slug, id }, language, i18n) => ({
+        path: `/${language}/${i18n.t('common:eventSlug')}/${slug}`,
+        component: templates.event,
+        context: { id }
+      }),
+      definitions => {
+        const alternateLinks = getAlternateLinksData(definitions);
 
-  const eventTemplate = path.resolve('src/templates/Event.js');
-
-  await buildI18nPages(
-    events.nodes,
-    ({ slug, id }, language, i18n) => ({
-      path: `/${language}/${i18n.t('common:eventSlug')}/${slug}`,
-      component: eventTemplate,
-      context: { id }
-    }),
-    definitions => {
-      const alternateLinks = getAlternateLinksData(definitions);
-
-      definitions.forEach(d => {
-        d.context.alternateLinks = alternateLinks;
-        createPage(d);
-      });
-    },
-    ['common', 'event']
-  );
-
-  await build404Pages(createPage);
+        definitions.forEach(d => {
+          d.context.alternateLinks = alternateLinks;
+          createPage(d);
+        });
+      }
+    ),
+    build404Pages(createPage)
+  ]);
 
   createRedirect({
     fromPath: '/',
