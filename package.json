@@ -6,6 +6,7 @@
   "author": "Filip Malinowski <filip@fmal.me>",
   "dependencies": {
     "@directus/gatsby-source-directus": "~0.2.6",
+    "@theme-ui/presets": "~0.3.0",
     "gatsby": "~2.23.11",
     "gatsby-image": "~2.4.9",
     "gatsby-plugin-manifest": "~2.4.14",
@@ -23,11 +24,11 @@
     "react": "~16.13.1",
     "react-dom": "~16.13.1",
     "react-helmet": "~6.1.0",
-    "react-i18next": "~11.7.0"
+    "react-i18next": "~11.7.0",
+    "theme-ui": "~0.3.1"
   },
   "devDependencies": {
     "cross-env": "~7.0.2",
-    "cssnano": "~4.1.10",
     "dotenv": "~8.2.0",
     "eslint": "~7.3.1",
     "eslint-config-fmal": "~7.1.0",
@@ -37,9 +38,7 @@
     "husky": "~4.2.5",
     "lint-staged": "~10.2.11",
     "npm-check": "~5.9.2",
-    "postcss-preset-env": "~6.7.0",
-    "prettier": "2.0.5",
-    "tailwindcss": "~1.4.6"
+    "prettier": "2.0.5"
   },
   "keywords": [
     "gatsby"

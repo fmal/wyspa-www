@@ -1,11 +1,12 @@
 import React from 'react';
 import { graphql } from 'gatsby';
+import { useTranslation } from 'react-i18next';
+import { Styled } from 'theme-ui';
 
 import localize from '../components/localize';
 import SEO from '../components/SEO';
 import LocalizedLink from '../components/LocalizedLink';
 import Pagination from '../components/Pagination';
-import { useTranslation } from 'react-i18next';
 
 const CategoryArchive = ({ data, pageContext }) => {
   const { events, category } = data;
@@ -13,21 +14,21 @@ const CategoryArchive = ({ data, pageContext }) => {
   const { t } = useTranslation('category');
 
   return (
-    <>
+    <React.Fragment>
       <SEO title={`${category.name} -  ${year}`} />
-      <h1 className="m-0 text-xl">{`${category.name} -  ${year}`}</h1>
-      <ul className="mt-4">
+      <Styled.h1>{`${category.name} -  ${year}`}</Styled.h1>
+      <Styled.ul className="mt-4">
         {events.nodes.map(event => (
           <li key={event.id}>
-            <LocalizedLink
-              className="text-blue-700"
+            <Styled.a
+              as={LocalizedLink}
               to={`/${t('common:eventSlug')}/${event.slug}`}
             >
               {event.title}
-            </LocalizedLink>
+            </Styled.a>
           </li>
         ))}
-      </ul>
+      </Styled.ul>
       <Pagination
         currentPage={currentPage}
         pageCount={pageCount}
@@ -35,7 +36,7 @@ const CategoryArchive = ({ data, pageContext }) => {
           'common:yearSlug'
         )}/${year}`}
       />
-    </>
+    </React.Fragment>
   );
 };
 

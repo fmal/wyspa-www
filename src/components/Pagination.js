@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Styled } from 'theme-ui';
 import { useTranslation } from 'react-i18next';
 
 import LocalizedLink from './LocalizedLink';
@@ -21,19 +22,19 @@ const Pagination = ({ currentPage, pageCount, contextPage }) => {
   const nextPage = `${base}/${t('pageSlug')}/${currentPage + 1}`;
 
   return (
-    <>
+    <React.Fragment>
       {!isFirst && (
-        <LocalizedLink to={prevPage} rel="prev">
+        <Styled.a as={LocalizedLink} to={prevPage} rel="prev">
           {t('previousPage')}
-        </LocalizedLink>
+        </Styled.a>
       )}
       <span>{t('paginationLocation', { currentPage, pageCount })}</span>
       {!isLast && (
-        <LocalizedLink to={nextPage} rel="next">
+        <Styled.a as={LocalizedLink} to={nextPage} rel="next">
           {t('nextPage')}
-        </LocalizedLink>
+        </Styled.a>
       )}
-    </>
+    </React.Fragment>
   );
 };
 

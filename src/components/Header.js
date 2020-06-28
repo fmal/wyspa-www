@@ -1,5 +1,6 @@
+/** @jsx jsx */
+import { Styled, Container, jsx } from 'theme-ui';
 import { Link } from 'gatsby';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAlternateLinks } from '../providers/AlternateLinks';
@@ -10,30 +11,31 @@ const Header = () => {
   const { t, i18n } = useTranslation('common');
 
   return (
-    <header className="bg-teal-200">
-      <div className="container px-4 py-6 mx-auto">
-        <div className="float-right">
+    <header sx={{ backgroundColor: 'gray.2' }}>
+      <Container>
+        <div sx={{ float: 'right' }}>
           {alternateLinks &&
             alternateLinks
               .filter(link => link.language !== i18n.language)
               .map((link, i) => [
                 i > 0 && ' | ',
-                <Link
+                <Styled.a
+                  as={Link}
                   key={i}
                   to={link.path}
                   className="text-gray-900"
                   hrefLang={link.language}
                 >
                   {t(link.language)}
-                </Link>
+                </Styled.a>
               ])}
         </div>
-        <h1 className="m-0 text-xl">
-          <LocalizedLink to="/" className="text-gray-900">
+        <Styled.h1>
+          <Styled.a as={LocalizedLink} to="/">
             {t('title')}
-          </LocalizedLink>
-        </h1>
-      </div>
+          </Styled.a>
+        </Styled.h1>
+      </Container>
     </header>
   );
 };

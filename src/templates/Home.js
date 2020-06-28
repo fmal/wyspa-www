@@ -1,4 +1,5 @@
 import React from 'react';
+import { Styled } from 'theme-ui';
 import { graphql } from 'gatsby';
 import { useTranslation } from 'react-i18next';
 
@@ -14,22 +15,22 @@ const Home = ({ data }) => {
   const { t } = useTranslation('home');
 
   return (
-    <>
+    <React.Fragment>
       <SEO title={t('title')} />
-      <h1 className="m-0 text-xl">{t('title')}</h1>
-      <ul className="mt-4">
+      <Styled.h1>{t('title')}</Styled.h1>
+      <Styled.ul>
         {categories.map(category => (
           <li key={category.id}>
-            <LocalizedLink
-              className="text-blue-700"
+            <Styled.a
+              as={LocalizedLink}
               to={`/${t('common:categorySlug')}/${category.slug}`}
             >
               {category.name}
-            </LocalizedLink>
+            </Styled.a>
           </li>
         ))}
-      </ul>
-    </>
+      </Styled.ul>
+    </React.Fragment>
   );
 };
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { graphql } from 'gatsby';
+import { Styled } from 'theme-ui';
 
 import localize from '../components/localize';
 import SEO from '../components/SEO';
@@ -13,41 +14,41 @@ const Category = ({ data, pageContext }) => {
   const { t } = useTranslation('category');
 
   return (
-    <>
+    <React.Fragment>
       <SEO title={category.name} />
-      <h1 className="m-0 text-xl">{category.name}</h1>
-      <ul className="mt-4">
+      <Styled.h1>{category.name}</Styled.h1>
+      <Styled.ul>
         {yearsGroup.group.map(({ year, totalCount }) => (
           <li key={year}>
-            <LocalizedLink
-              className="text-blue-700"
+            <Styled.a
+              as={LocalizedLink}
               to={`/${t('common:categorySlug')}/${category.slug}/${t(
                 'common:yearSlug'
               )}/${year}`}
             >
               {year} {`(${totalCount})`}
-            </LocalizedLink>
+            </Styled.a>
           </li>
         ))}
-      </ul>
-      <ul className="mt-4">
+      </Styled.ul>
+      <Styled.ul>
         {events.nodes.map(event => (
           <li key={event.id}>
-            <LocalizedLink
-              className="text-blue-700"
+            <Styled.a
+              as={LocalizedLink}
               to={`/${t('common:eventSlug')}/${event.slug}`}
             >
               {event.title}
-            </LocalizedLink>
+            </Styled.a>
           </li>
         ))}
-      </ul>
+      </Styled.ul>
       <Pagination
         currentPage={currentPage}
         pageCount={pageCount}
         contextPage={`${t('common:categorySlug')}/${category.slug}`}
       />
-    </>
+    </React.Fragment>
   );
 };
 

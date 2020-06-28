@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { tailwind } = require('@theme-ui/presets');
 
 // load env variables
 ['.env', `.env.${process.env.NODE_ENV}`]
@@ -10,11 +11,6 @@ const path = require('path');
       path: filepath
     });
   });
-
-const resolveConfig = require('tailwindcss/resolveConfig');
-const tailwindConfig = require('./tailwind.config.js');
-
-const fullConfig = resolveConfig(tailwindConfig);
 
 module.exports = {
   siteMetadata: {
@@ -49,8 +45,8 @@ module.exports = {
         name: 'gatsby-starter-default',
         short_name: 'starter',
         start_url: '/',
-        background_color: fullConfig.theme.colors.white,
-        theme_color: fullConfig.theme.colors.teal['400'],
+        background_color: tailwind.colors.white,
+        theme_color: tailwind.colors.blue[6],
         display: 'minimal-ui',
         icon: 'src/images/gatsby-icon.png' // This path is relative to the root of the site.
       }
