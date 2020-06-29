@@ -46,9 +46,9 @@ module.exports = {
         short_name: 'starter',
         start_url: '/',
         background_color: tailwind.colors.white,
-        theme_color: tailwind.colors.blue[6],
+        theme_color: tailwind.colors.indigo[6],
         display: 'minimal-ui',
-        icon: 'src/images/gatsby-icon.png' // This path is relative to the root of the site.
+        icon: 'src/images/icon.png' // This path is relative to the root of the site.
       }
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality

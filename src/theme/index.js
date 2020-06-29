@@ -5,7 +5,8 @@ export default merge(tailwind, {
   useCustomProperties: false,
   colors: {
     text: tailwind.colors.gray[8],
-    primary: tailwind.colors.blue[6],
+    primary: tailwind.colors.indigo[7],
+    secondary: tailwind.colors.blue[7],
     background: tailwind.colors.gray[1],
     textMuted: tailwind.colors.gray[7],
     heading: tailwind.colors.black,
@@ -47,7 +48,8 @@ export default merge(tailwind, {
       }
     },
     body: {
-      fontSize: [1, 1, 2]
+      fontSize: [1, 1, 2],
+      hyphens: 'auto'
     },
     italic: {
       fontStyle: 'italic',
@@ -64,6 +66,14 @@ export default merge(tailwind, {
     bold: {
       fontWeight: 'bold',
       fontSynthesis: 'none'
+    }
+  },
+  links: {
+    social: {
+      color: 'text',
+      '&:focus, &:hover': {
+        color: 'primary'
+      }
     }
   },
   styles: {
@@ -85,8 +95,9 @@ export default merge(tailwind, {
       }
     },
     p: {
+      variant: 'text.body',
       m: 0,
-      mb: 2
+      mb: 3
     },
     ul: {
       variant: 'layout.list',
@@ -108,7 +119,7 @@ export default merge(tailwind, {
     ol: {
       variant: 'layout.list',
       li: {
-        mb: 1
+        mb: 2
       }
     },
     li: {
@@ -118,26 +129,27 @@ export default merge(tailwind, {
     },
     h1: {
       variant: 'text.heading',
-      fontSize: [5, 6, 7],
-      mt: 2
+      fontSize: [4, 5, 6],
+      my: 3
     },
     h2: {
       variant: 'text.heading',
-      fontSize: [4, 5, 6],
-      mt: 2
+      fontSize: [3, 4, 5],
+      mt: 3,
+      mb: 2
     },
     h3: {
       variant: 'text.heading',
-      fontSize: [3, 4, 5],
+      fontSize: [2, 3, 4],
       mt: 3
     },
     h4: {
       variant: 'text.heading',
-      fontSize: [2, 3, 4]
+      fontSize: [1, 2, 3]
     },
     h5: {
       variant: 'text.heading',
-      fontSize: [1, 2, 3]
+      fontSize: 1
     },
     h6: {
       variant: 'text.heading',

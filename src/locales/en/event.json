@@ -1,3 +1,5 @@
 {
-  "title": "Event"
+  "title": "Event",
+  "start": "Start",
+  "end": "End"
 }

@@ -145,7 +145,7 @@ exports.onCreateNode = ({ node, actions }) => {
   const { createNodeField } = actions;
 
   if (node.internal.type === 'DirectusEvent') {
-    const date = new Date(node.created_date);
+    const date = new Date(node.start_date);
     const year = date.getFullYear();
 
     // So we can group and sort by these

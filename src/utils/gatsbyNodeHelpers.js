@@ -43,7 +43,7 @@ exports.getAlternateLinksData = (definitions = []) =>
       }))
     : [];
 
-const PAGINATION_OFFSET = 10;
+const PAGINATION_OFFSET = 8;
 
 exports.createPaginatedPagesFactory = (createPage, i18n) => (
   nodes,

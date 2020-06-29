@@ -1,3 +1,6 @@
 {
-  "title": "Category"
+  "title": "Category",
+  "yearContext": "{{ count }} event in {{year}}",
+  "yearContext_plural": "{{ count }} events in {{year}}",
+  "allEvents": "All events"
 }

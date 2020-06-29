@@ -1,11 +1,14 @@
+/** @jsx jsx */
 import React from 'react';
-import { Styled } from 'theme-ui';
+import { jsx, Container } from 'theme-ui';
 import { graphql } from 'gatsby';
 import { useTranslation } from 'react-i18next';
+import { useTrail } from 'react-spring';
 
 import localize from '../components/localize';
 import SEO from '../components/SEO';
-import LocalizedLink from '../components/LocalizedLink';
+import Card from '../components/Card';
+import Header from '../components/Header';
 
 const Home = ({ data }) => {
   const {
@@ -14,22 +17,45 @@ const Home = ({ data }) => {
 
   const { t } = useTranslation('home');
 
+  const trail = useTrail(categories.length, {
+    from: { opacity: 0, transform: 'translate3d(0, 30px, 0)' },
+    to: { opacity: 1, transform: 'translate3d(0, 0, 0)' }
+  });
+
   return (
     <React.Fragment>
       <SEO title={t('title')} />
-      <Styled.h1>{t('title')}</Styled.h1>
-      <Styled.ul>
-        {categories.map(category => (
-          <li key={category.id}>
-            <Styled.a
-              as={LocalizedLink}
-              to={`/${t('common:categorySlug')}/${category.slug}`}
-            >
-              {category.name}
-            </Styled.a>
-          </li>
-        ))}
-      </Styled.ul>
+      <Header />
+      <Container
+        sx={{
+          mt: '-6rem',
+          display: 'grid',
+          gridTemplateColumns: ['1fr', 'repeat(auto-fill, minmax(350px, 1fr))'],
+          gridGap: 4
+        }}
+      >
+        {trail.map((style, idx) => {
+          const category = categories[idx];
+
+          let image;
+          if (category.image != null) {
+            image = category.image.localFile.childImageSharp.fluid;
+          } else if (category.lastEvent != null) {
+            image =
+              category.lastEvent.featured_image.localFile.childImageSharp.fluid;
+          }
+
+          return (
+            <Card
+              key={category.id}
+              title={category.name}
+              image={image}
+              link={`/${t('common:categorySlug')}/${category.slug}`}
+              style={style}
+            />
+          );
+        })}
+      </Container>
     </React.Fragment>
   );
 };
@@ -45,6 +71,15 @@ export const query = graphql`
     ) {
       nodes {
         id
+        image {
+          localFile {
+            childImageSharp {
+              fluid(maxWidth: 770) {
+                ...GatsbyImageSharpFluid_withWebp
+              }
+            }
+          }
+        }
         translations {
           language
           name
@@ -55,7 +90,7 @@ export const query = graphql`
             localFile {
               id
               childImageSharp {
-                fluid {
+                fluid(maxWidth: 770) {
                   ...GatsbyImageSharpFluid_withWebp
                 }
               }

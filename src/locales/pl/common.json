@@ -1,5 +1,5 @@
 {
-  "title": "Instytut Sztuki Wyspa",
+  "title": "Fundacja Wyspa",
   "description": "Wyspa WWW.",
   "pl": "Polski",
   "en": "English",
@@ -8,7 +8,8 @@
   "eventSlug": "wydarzenie",
   "pageSlug": "strona",
   "yearSlug": "rok",
-  "previousPage": "← Poprzednia strona",
-  "nextPage": "Następna strona →",
-  "paginationLocation": "Strona {{currentPage}} z {{pageCount}}"
+  "previousPage": "Poprzednia strona",
+  "nextPage": "Następna strona",
+  "paginationLocation": "Strona {{currentPage}} z {{pageCount}}",
+  "backToHome": "Powrót na stronę główną"
 }
