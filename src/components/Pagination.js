@@ -42,6 +42,7 @@ const Pagination = ({ currentPage, pageCount, contextPage, sx, ...props }) => {
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
+          fontSize: 0,
           color: 'textMuted'
         }}
       >

@@ -11,8 +11,8 @@ const Footer = () => {
     <footer
       sx={{
         flex: 'none',
-        pt: 5,
-        pb: 4,
+        pt: [4, null, null, 5],
+        pb: [4],
         background:
           'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15))'
       }}

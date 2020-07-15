@@ -1,21 +1,32 @@
 /** @jsx jsx */
 import React from 'react';
-import { jsx, Container } from 'theme-ui';
+import { jsx, Heading, Container, Styled } from 'theme-ui';
 import { graphql } from 'gatsby';
 import { useTranslation } from 'react-i18next';
-import { useTrail } from 'react-spring';
+import { useTrail, animated } from 'react-spring';
 
 import localize from '../components/localize';
 import SEO from '../components/SEO';
 import Pagination from '../components/Pagination';
-import HeaderCategory from '../components/HeaderCategory';
+import Header from '../components/Header';
+import BackgroundImage from '../components/BackgroundImage';
 import Card from '../components/Card';
+import Copy from '../components/Copy';
+import LocalizedLink from '../components/LocalizedLink';
+import {
+  useFadeAnimation,
+  useSlideInDownAndFadeAnimation
+} from '../hooks/animations';
 
 const Category = ({ data, pageContext }) => {
   const { events, category, yearsGroup } = data;
   const { currentPage, pageCount } = pageContext;
   const { t } = useTranslation('category');
+  const years = yearsGroup?.group;
+  const isFirstPage = currentPage === 1;
 
+  const titleProps = useSlideInDownAndFadeAnimation();
+  const infoProps = useFadeAnimation({ delay: 500 });
   const trail = useTrail(events.nodes.length, {
     from: { opacity: 0, transform: 'translate3d(0, 30px, 0)' },
     to: { opacity: 1, transform: 'translate3d(0, 0, 0)' }
@@ -24,12 +35,88 @@ const Category = ({ data, pageContext }) => {
   return (
     <React.Fragment>
       <SEO title={category.name} />
-      <HeaderCategory category={category} years={yearsGroup?.group} />
-      <Container
-        sx={{
-          mt: '-6rem'
-        }}
-      >
+      <BackgroundImage
+        imageData={category.image.localFile.childImageSharp.sizes.tracedSVG}
+      />
+      <Header>
+        <div
+          sx={{
+            mt: [4, null, '2.5rem', null, '3rem']
+          }}
+        >
+          <div
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: [
+                '1fr',
+                'repeat(auto-fill, minmax(350px, 1fr))'
+              ],
+              gridColumnGap: 4
+            }}
+          >
+            <div
+              sx={{
+                gridColumn: [
+                  null,
+                  '1 / -1',
+                  null,
+                  '1 / span 2',
+                  null,
+                  '1 / span 3'
+                ]
+              }}
+            >
+              <animated.div style={titleProps}>
+                <Heading
+                  as="h1"
+                  sx={{
+                    fontSize: [3, 4, 5],
+                    fontWeight: 'heading'
+                  }}
+                >
+                  {category.name}
+                </Heading>
+              </animated.div>
+              <animated.div style={infoProps}>
+                {isFirstPage && category.description != null && (
+                  <Copy
+                    sx={{ mt: 3 }}
+                    // eslint-disable-next-line react/no-danger
+                    dangerouslySetInnerHTML={{ __html: category.description }}
+                  />
+                )}
+                {years && (
+                  <div sx={{ mt: [2, null, 3], variant: 'text.body' }}>
+                    {years
+                      .sort((a, b) => Number(b.year) - Number(a.year))
+                      .map(({ year }, i) => (
+                        <React.Fragment key={year}>
+                          {i > 0 && (
+                            <span
+                              aria-hidden
+                              sx={{ color: 'textMuted', mx: 2 }}
+                            >
+                              {'·'}
+                            </span>
+                          )}
+                          <Styled.a
+                            as={LocalizedLink}
+                            to={`/${t('common:categorySlug')}/${
+                              category.slug
+                            }/${t('common:yearSlug')}/${year}`}
+                          >
+                            {year}
+                          </Styled.a>
+                        </React.Fragment>
+                      ))}
+                  </div>
+                )}
+              </animated.div>
+            </div>
+          </div>
+        </div>
+      </Header>
+      <Container>
         <div
           sx={{
             display: 'grid',
@@ -76,7 +163,17 @@ export const query = graphql`
       translations {
         name
         slug
+        description
         language
+      }
+      image {
+        localFile {
+          childImageSharp {
+            sizes(traceSVG: { color: "#4a5568" }) {
+              tracedSVG
+            }
+          }
+        }
       }
     }
     yearsGroup: allDirectusEvent(

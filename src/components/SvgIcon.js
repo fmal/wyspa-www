@@ -30,7 +30,8 @@ const SvgIcon = ({ size = 24, title, pathData, sx, ...props }) => {
           maxHeight: '100%',
           pointerEvents: 'none'
         }}
-        role={titleId ? 'img' : 'presentation'}
+        role={titleId ? 'img' : undefined}
+        aria-hidden={titleId == null ? true : undefined}
         viewBox={viewBox}
         aria-labelledby={titleId}
       >

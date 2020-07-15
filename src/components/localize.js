@@ -1,5 +1,5 @@
 import React from 'react';
-import Proptypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import mergeLanguageFactory from '../utils/mergeLanguageFactory';
 
@@ -13,9 +13,9 @@ function localize(Component) {
   }
 
   LocalizeHOC.propTypes = {
-    data: Proptypes.object,
-    pageContext: Proptypes.shape({
-      language: Proptypes.string
+    data: PropTypes.object,
+    pageContext: PropTypes.shape({
+      language: PropTypes.string
     })
   };
 

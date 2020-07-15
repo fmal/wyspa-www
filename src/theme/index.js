@@ -40,7 +40,7 @@ export default merge(tailwind, {
       color: 'heading'
     },
     body: {
-      fontSize: [0, null, 1],
+      fontSize: [0, 0, 1],
       hyphens: 'auto'
     },
     italic: {

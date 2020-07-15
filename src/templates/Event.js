@@ -1,41 +1,54 @@
 /** @jsx jsx */
 import React from 'react';
 import { graphql } from 'gatsby';
-import { jsx, Container } from 'theme-ui';
-import { animated, useSpring, config } from 'react-spring';
+import { jsx, Container, Heading } from 'theme-ui';
+import { animated } from 'react-spring';
 import Img from 'gatsby-image';
 
 import localize from '../components/localize';
 import SEO from '../components/SEO';
 import Copy from '../components/Copy';
-import HeaderEvent from '../components/HeaderEvent';
+import Header from '../components/Header';
 import EventInfo from '../components/EventInfo';
+import {
+  useFadeAnimation,
+  useSlideInDownAndFadeAnimation
+} from '../hooks/animations';
 
 const Event = ({ data }) => {
   const { directusEvent: event } = data;
 
-  const contentProps = useSpring({
-    config: config.slow,
-    delay: 500,
-    from: { opacity: 0 },
-    to: { opacity: 1 }
-  });
-  const fadeProps = useSpring({
-    config: config.slow,
-    delay: 500,
-    from: { opacity: 0 },
-    to: { opacity: 1 }
-  });
+  const titleProps = useSlideInDownAndFadeAnimation();
+  const fadeProps = useFadeAnimation({ delay: 500 });
 
   return (
     <React.Fragment>
       <SEO title={event.title} />
-      <HeaderEvent event={event} />
+      <Header>
+        <div
+          sx={{
+            mt: [4, null, '3.5rem', null, '4rem'],
+            textAlign: ['left', null, null, 'center']
+          }}
+        >
+          <animated.div style={titleProps}>
+            <Heading
+              as="h1"
+              sx={{
+                fontSize: [3, 4, 5],
+                fontWeight: 'heading'
+              }}
+            >
+              {event.title}
+            </Heading>
+          </animated.div>
+        </div>
+      </Header>
       <Container sx={{ maxWidth: '3xl', mt: [2, 3] }}>
         <animated.div style={fadeProps}>
           <EventInfo event={event} />
         </animated.div>
-        <animated.div style={contentProps}>
+        <animated.div style={fadeProps}>
           <Copy
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: event.body }}

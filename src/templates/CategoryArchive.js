@@ -2,20 +2,28 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 import { useTranslation } from 'react-i18next';
-import { useTrail } from 'react-spring';
-import { jsx, Container } from 'theme-ui';
+import { useTrail, animated } from 'react-spring';
+import { jsx, Container, Heading, Styled } from 'theme-ui';
 
 import localize from '../components/localize';
 import SEO from '../components/SEO';
 import Pagination from '../components/Pagination';
-import HeaderCategory from '../components/HeaderCategory';
+import Header from '../components/Header';
+import BackgroundImage from '../components/BackgroundImage';
 import Card from '../components/Card';
+import LocalizedLink from '../components/LocalizedLink';
+import {
+  useFadeAnimation,
+  useSlideInDownAndFadeAnimation
+} from '../hooks/animations';
 
 const CategoryArchive = ({ data, pageContext }) => {
   const { events, category } = data;
   const { currentPage, pageCount, year } = pageContext;
   const { t } = useTranslation('category');
 
+  const titleProps = useSlideInDownAndFadeAnimation();
+  const infoProps = useFadeAnimation({ delay: 500 });
   const trail = useTrail(events.nodes.length, {
     from: { opacity: 0, transform: 'translate3d(0, 30px, 0)' },
     to: { opacity: 1, transform: 'translate3d(0, 0, 0)' }
@@ -24,16 +32,52 @@ const CategoryArchive = ({ data, pageContext }) => {
   return (
     <React.Fragment>
       <SEO title={`${category.name} — ${year}`} />
-      <HeaderCategory
-        category={category}
-        year={year}
-        totalCount={events.totalCount}
+      <BackgroundImage
+        imageData={category.image.localFile.childImageSharp.sizes.tracedSVG}
       />
-      <Container
-        sx={{
-          mt: '-6rem'
-        }}
-      >
+      <Header>
+        <div
+          sx={{
+            mt: [4, null, '2.5rem', null, '3rem']
+          }}
+        >
+          <animated.div style={titleProps}>
+            <Heading
+              as="h1"
+              sx={{
+                fontSize: [3, 4, 5],
+                fontWeight: 'heading'
+              }}
+            >
+              {category.name}
+            </Heading>
+          </animated.div>
+          <animated.div style={infoProps}>
+            <div
+              sx={{
+                mt: [2, null, 3],
+                variant: 'text.body',
+                color: 'textMuted'
+              }}
+            >
+              {t('yearContext', {
+                count: events.totalCount,
+                year
+              })}
+              <span aria-hidden sx={{ color: 'textMuted', mx: 2 }}>
+                {'·'}
+              </span>
+              <Styled.a
+                as={LocalizedLink}
+                to={`/${t('common:categorySlug')}/${category.slug}`}
+              >
+                {t('allEvents')}
+              </Styled.a>
+            </div>
+          </animated.div>
+        </div>
+      </Header>
+      <Container>
         <div
           sx={{
             display: 'grid',
@@ -84,6 +128,15 @@ export const query = graphql`
         name
         slug
         language
+      }
+      image {
+        localFile {
+          childImageSharp {
+            sizes(traceSVG: { color: "#4a5568" }) {
+              tracedSVG
+            }
+          }
+        }
       }
     }
     events: allDirectusEvent(

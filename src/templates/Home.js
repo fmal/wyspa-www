@@ -8,7 +8,7 @@ import { useTrail } from 'react-spring';
 import localize from '../components/localize';
 import SEO from '../components/SEO';
 import Card from '../components/Card';
-import Header from '../components/Header';
+import Header from '../components/HeaderHome';
 
 const Home = ({ data }) => {
   const {
@@ -28,7 +28,6 @@ const Home = ({ data }) => {
       <Header />
       <Container
         sx={{
-          mt: '-6rem',
           display: 'grid',
           gridTemplateColumns: ['1fr', 'repeat(auto-fill, minmax(350px, 1fr))'],
           gridGap: 4

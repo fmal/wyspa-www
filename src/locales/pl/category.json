@@ -2,6 +2,6 @@
   "title": "Kategoria",
   "yearContext_0": "W roku {{year}} odbyło się {{ count }} wydarzenie",
   "yearContext_2": "W roku {{year}} odbyło się {{ count }} wydarzeń",
-  "yearContext_1": "W roku {{year}} odbyło się {{ count }} wydarzenia",
+  "yearContext_1": "W roku {{year}} odbyły się {{ count }} wydarzenia",
   "allEvents": "Wszystkie wydarzenia"
 }

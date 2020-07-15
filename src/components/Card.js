@@ -30,15 +30,12 @@ const Card = ({ image, title, link, style, isEventCard = false }) => {
     >
       <div
         sx={{
-          '> div': {
+          '> .gatsby-image-wrapper': {
             height: '100%',
             left: 0,
             position: 'absolute !important',
             top: 0,
-            width: '100%',
-            '> div': {
-              position: 'static !important'
-            }
+            width: '100%'
           }
         }}
       >
@@ -46,7 +43,6 @@ const Card = ({ image, title, link, style, isEventCard = false }) => {
       </div>
       <Link
         as={LocalizedLink}
-        aria-label={`Visit ${title} project page`}
         to={link}
         sx={{
           position: 'absolute',
@@ -90,8 +86,9 @@ const Card = ({ image, title, link, style, isEventCard = false }) => {
         <Heading
           as="h2"
           sx={{
-            fontSize: isEventCard ? [1, 2] : [2, 4],
-            fontWeight: 'bold',
+            mr: 2,
+            variant: isEventCard ? undefined : 'text.caps',
+            fontSize: isEventCard ? [1, 2] : [2, 3],
             color: 'white',
             textShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 12px'
           }}
