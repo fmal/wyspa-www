@@ -13,21 +13,17 @@ export default merge(tailwind, {
     muted: tailwind.colors.gray[3]
   },
   fonts: {
-    body: `'Inter var'`,
-    heading: 'Amstelvar',
-    safe: {
-      body: 'system-ui, -apple-system, sans-serif',
-      heading: 'system-ui, -apple-system, sans-serif'
-    }
+    body: `'Inter var', system-ui, -apple-system, sans-serif`
   },
   fontWeights: {
     body: 350,
-    heading: 625,
+    heading: 675,
     bold: 775
   },
   sizes: {
     container: 1600
   },
+  breakpoints: [...tailwind.breakpoints, '1595px'],
   layout: {
     container: {
       px: [3, 4],
@@ -41,31 +37,24 @@ export default merge(tailwind, {
   },
   text: {
     heading: {
-      color: 'heading',
-      fontFeatureSettings: `'kern', 'pnum'`,
-      '& > em, & > em > b, & > b > em, & > strong > em, & > em > strong, & > i, & > i > b, & > b > i, & > strong > i, & > i > strong': {
-        variant: 'text.italicHeading'
-      }
+      color: 'heading'
     },
     body: {
-      fontSize: [1, 1, 2],
+      fontSize: [0, null, 1],
       hyphens: 'auto'
     },
     italic: {
-      fontStyle: 'italic',
-      fontSynthesis: 'none',
-      '@supports (font-variation-settings: normal)': {
-        fontVariationSettings: `'slnt' -10`,
-        fontStyle: 'oblique 10deg'
-      }
-    },
-    italicHeading: {
       fontStyle: 'italic',
       fontSynthesis: 'none'
     },
     bold: {
       fontWeight: 'bold',
       fontSynthesis: 'none'
+    },
+    caps: {
+      textTransform: 'uppercase',
+      letterSpacing: 'wide',
+      fontFeatureSettings: `'kern', 'calt', 'cpsp', 'ss01', 'ss02', 'ss03'`
     }
   },
   links: {
