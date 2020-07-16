@@ -32,9 +32,11 @@ const CategoryArchive = ({ data, pageContext }) => {
   return (
     <React.Fragment>
       <SEO title={`${category.name} — ${year}`} />
-      <BackgroundImage
-        imageData={category.image.localFile.childImageSharp.sizes.tracedSVG}
-      />
+      {category.image != null && (
+        <BackgroundImage
+          imageData={category.image.localFile.childImageSharp.sizes.tracedSVG}
+        />
+      )}
       <Header>
         <div
           sx={{
