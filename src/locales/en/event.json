@@ -1,5 +1,9 @@
 {
   "title": "Event",
-  "start": "Start",
-  "end": "End"
+  "date": "Date",
+  "openingHours": "Opening hours",
+  "curators": "Curators",
+  "location": "Location",
+  "freeAdmission": "Free admission",
+  "seeOnMap": "See on the map"
 }

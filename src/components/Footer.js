@@ -25,10 +25,10 @@ const Footer = () => {
             flexDirection: ['column', 'column', 'row']
           }}
         >
-          <span sx={{ variant: 'text.body', color: 'textMuted' }}>
+          <span sx={{ variant: 'text.default', color: 'textMuted' }}>
             {'©'} {new Date().getFullYear()} {t('title')}
           </span>
-          <SocialMediaLinks sx={{ variant: 'text.body', mt: [2, 0] }} />
+          <SocialMediaLinks sx={{ variant: 'text.default', mt: [2, 0] }} />
         </div>
       </Container>
     </footer>

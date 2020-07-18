@@ -28,7 +28,7 @@ const Header = ({ children }) => {
             mt: [2, '2.5rem']
           }}
         >
-          <LanguageSelector sx={{ variant: 'text.body', mr: [2, 3] }} />
+          <LanguageSelector sx={{ variant: 'text.default', mr: [2, 3] }} />
           <SocialMediaLinks sx={{ fontSize: [1, 2, 3] }} showIcons />
         </animated.div>
         <div sx={{ mt: [5, 4], mb: [4, 3, null, 4] }}>

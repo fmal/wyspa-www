@@ -39,8 +39,11 @@ export default merge(tailwind, {
     heading: {
       color: 'heading'
     },
+    default: {
+      fontSize: [0, 0, 1]
+    },
     body: {
-      fontSize: [0, 0, 1],
+      variant: 'text.default',
       hyphens: 'auto'
     },
     italic: {
@@ -86,7 +89,7 @@ export default merge(tailwind, {
     p: {
       variant: 'text.body',
       m: 0,
-      mb: 3
+      mb: '1.5rem'
     },
     ul: {
       variant: 'layout.list',
@@ -108,7 +111,7 @@ export default merge(tailwind, {
     ol: {
       variant: 'layout.list',
       li: {
-        mb: 2
+        mb: 3
       }
     },
     li: {
@@ -119,18 +122,18 @@ export default merge(tailwind, {
     h1: {
       variant: 'text.heading',
       fontSize: [4, 5, 6],
-      my: 3
+      my: 4
     },
     h2: {
       variant: 'text.heading',
       fontSize: [3, 4, 5],
-      mt: 3,
-      mb: 2
+      mt: 4,
+      mb: '1.5rem'
     },
     h3: {
       variant: 'text.heading',
       fontSize: [2, 3, 4],
-      mt: 3
+      mt: 4
     },
     h4: {
       variant: 'text.heading',
@@ -143,7 +146,7 @@ export default merge(tailwind, {
     h6: {
       variant: 'text.heading',
       fontSize: 1,
-      mb: 2
+      mb: 3
     },
     i: {
       variant: 'text.italic'

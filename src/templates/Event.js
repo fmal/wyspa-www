@@ -9,7 +9,7 @@ import localize from '../components/localize';
 import SEO from '../components/SEO';
 import Copy from '../components/Copy';
 import Header from '../components/Header';
-import EventInfo from '../components/EventInfo';
+import EventMeta from '../components/EventMeta';
 import {
   useFadeAnimation,
   useSlideInDownAndFadeAnimation
@@ -27,8 +27,7 @@ const Event = ({ data }) => {
       <Header>
         <div
           sx={{
-            mt: [4, null, '3.5rem', null, '4rem'],
-            textAlign: ['left', null, null, 'center']
+            mt: [4, null, '3.5rem', null, '4rem']
           }}
         >
           <animated.div style={titleProps}>
@@ -44,36 +43,89 @@ const Event = ({ data }) => {
           </animated.div>
         </div>
       </Header>
-      <Container sx={{ maxWidth: '3xl', mt: [2, 3] }}>
-        <animated.div style={fadeProps}>
-          <EventInfo event={event} />
-        </animated.div>
-        <animated.div style={fadeProps}>
-          <Copy
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: event.body }}
-          />
-        </animated.div>
-        {event.featured_image && (
-          <animated.div sx={{ mt: 4, maxWidth: '3xl' }} style={fadeProps}>
-            <Img fluid={event.featured_image.localFile.childImageSharp.fluid} />
-          </animated.div>
-        )}
+      <Container sx={{ mt: [null, null, 2, 3] }}>
+        <div
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: [
+              '1fr',
+              'repeat(auto-fill, minmax(128px, 1fr))'
+            ],
+            gridColumnGap: 4
+          }}
+        >
+          <div sx={{ gridColumn: [null, '1 / -1', null, 'span 2'] }}>
+            <animated.div style={fadeProps}>
+              <EventMeta event={event} />
+            </animated.div>
+          </div>
+          <div
+            sx={{
+              gridColumn: [null, '1 / -1', null, '3 / span 5']
+            }}
+          >
+            <animated.div style={fadeProps}>
+              <Copy
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: event.body }}
+              />
+              {event.featured_image && (
+                <div sx={{ mt: 4 }}>
+                  <Img
+                    fluid={event.featured_image.localFile.childImageSharp.fluid}
+                  />
+                </div>
+              )}
+            </animated.div>
+          </div>
+        </div>
+        <div
+          sx={{
+            mt: 4,
+            display: 'grid',
+            gridTemplateColumns: [
+              '1fr',
+              'repeat(auto-fill, minmax(128px, 1fr))'
+            ],
+            gridColumnGap: 4
+          }}
+        >
+          <div
+            sx={{
+              gridColumn: [null, '1 / -1', null, '3 / span 5']
+            }}
+          >
+            <animated.div style={fadeProps}>
+              <Copy
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: event.body_extra }}
+              />
+            </animated.div>
+          </div>
+        </div>
       </Container>
     </React.Fragment>
   );
 };
 
 export const query = graphql`
-  query EventById($id: String!) {
+  query EventById($id: String!, $language: String!) {
     directusEvent(id: { eq: $id }) {
       created_date
-      start_date
-      end_date
+      start_date(locale: $language, formatString: "D MMMM YYYY")
+      start_date_full: start_date(
+        locale: $language
+        formatString: "D MMMM YYYY (dddd), HH:mm"
+      )
+      end_date(locale: $language, formatString: "D MMMM YYYY")
+      curators
+      free_admission
       translations {
         language
         title
         body
+        body_extra
+        opening_hours
       }
       categories {
         translations {
@@ -81,10 +133,18 @@ export const query = graphql`
           name
         }
       }
+      locations {
+        translations {
+          language
+          name
+          address
+        }
+        map_url
+      }
       featured_image {
         localFile {
           childImageSharp {
-            fluid(maxWidth: 500) {
+            fluid(maxWidth: 960) {
               ...GatsbyImageSharpFluid_withWebp
             }
           }

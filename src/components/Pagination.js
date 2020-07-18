@@ -61,7 +61,7 @@ const Pagination = ({ currentPage, pageCount, contextPage, sx, ...props }) => {
             to={prevPage}
             rel="prev"
             sx={{
-              variant: 'text.body',
+              variant: 'text.default',
               py: 2,
               px: 1,
               textDecoration: 'none',
@@ -97,7 +97,7 @@ const Pagination = ({ currentPage, pageCount, contextPage, sx, ...props }) => {
             to={nextPage}
             rel="next"
             sx={{
-              variant: 'text.body',
+              variant: 'text.default',
               py: 2,
               px: 1,
               ml: 'auto',
@@ -121,7 +121,7 @@ const Pagination = ({ currentPage, pageCount, contextPage, sx, ...props }) => {
               <SvgIcon
                 size={20}
                 pathData={
-                  'M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z'
+                  'M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z'
                 }
                 sx={{ flexShrink: 0, ml: [1, 2] }}
               />

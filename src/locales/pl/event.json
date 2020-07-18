@@ -1,5 +1,9 @@
 {
   "title": "Wydarzenie",
-  "start": "Otwarcie",
-  "end": "Zamknięcie"
+  "date": "Data",
+  "openingHours": "Godziny otwarcia",
+  "curators": "Kuratorzy",
+  "location": "Miejsce",
+  "freeAdmission": "Wstęp wolny",
+  "seeOnMap": "Zobacz na mapie"
 }

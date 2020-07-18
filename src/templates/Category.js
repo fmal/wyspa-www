@@ -88,7 +88,7 @@ const Category = ({ data, pageContext }) => {
                   />
                 )}
                 {years && (
-                  <div sx={{ mt: [2, null, 3], variant: 'text.body' }}>
+                  <div sx={{ mt: [2, null, 3], variant: 'text.default' }}>
                     {years
                       .sort((a, b) => Number(b.year) - Number(a.year))
                       .map(({ year }, i) => (

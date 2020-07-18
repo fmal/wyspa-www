@@ -58,7 +58,7 @@ const CategoryArchive = ({ data, pageContext }) => {
             <div
               sx={{
                 mt: [2, null, 3],
-                variant: 'text.body',
+                variant: 'text.default',
                 color: 'textMuted'
               }}
             >
