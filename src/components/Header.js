@@ -43,7 +43,10 @@ const Header = ({ children }) => {
               aria-label={t('backToHome')}
               sx={{
                 color: 'black',
-                textDecoration: 'none !important'
+                textDecoration: 'none !important',
+                '&:focus, &:hover': {
+                  color: 'primary'
+                }
               }}
             >
               <Logo />

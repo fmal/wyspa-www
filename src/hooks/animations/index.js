@@ -11,9 +11,10 @@ export const useFadeAnimation = ({ delay } = {}) => {
   return props;
 };
 
-export const useSlideInLeftAndFadeAnimation = () => {
+export const useSlideInLeftAndFadeAnimation = ({ delay } = {}) => {
   const props = useSpring({
     config: config.slow,
+    delay,
     from: { opacity: 0, transform: `translate3d(-30px, 0, 0)` },
     to: { opacity: 1, transform: `translate3d(0, 0, 0)` }
   });
@@ -21,9 +22,10 @@ export const useSlideInLeftAndFadeAnimation = () => {
   return props;
 };
 
-export const useSlideInDownAndFadeAnimation = () => {
+export const useSlideInDownAndFadeAnimation = ({ delay } = {}) => {
   const props = useSpring({
     config: config.slow,
+    delay,
     from: { opacity: 0, transform: 'translate3d(0, -30px, 0)' },
     to: { opacity: 1, transform: 'translate3d(0, 0, 0)' }
   });

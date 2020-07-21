@@ -3,10 +3,20 @@ import { jsx, Link, Heading } from 'theme-ui';
 import Img from 'gatsby-image';
 import { alpha } from '@theme-ui/color';
 import { animated } from 'react-spring';
+import { useTranslation } from 'react-i18next';
 
 import LocalizedLink from './LocalizedLink';
 
-const Card = ({ image, title, link, style, isEventCard = false }) => {
+const Card = ({
+  image,
+  title,
+  link,
+  style,
+  isEventCard = false,
+  isOngoing = false
+}) => {
+  const { t } = useTranslation('event');
+
   return (
     <animated.div
       sx={{
@@ -56,6 +66,7 @@ const Card = ({ image, title, link, style, isEventCard = false }) => {
           padding: 3,
           zIndex: 1,
           color: 'white',
+          textDecoration: 'none !important',
           '&:after': {
             content: `""`,
             position: 'absolute',
@@ -71,12 +82,10 @@ const Card = ({ image, title, link, style, isEventCard = false }) => {
             transition: 'opacity 0.3s'
           },
           '&:focus': {
-            textDecoration: 'none',
             outline: 'none',
             boxShadow: t => `0 0 0 10px ${alpha('indigo.6', 0.375)(t)}`
           },
           '&:hover': {
-            textDecoration: 'none',
             '&:after': {
               opacity: 0
             }
@@ -110,6 +119,24 @@ const Card = ({ image, title, link, style, isEventCard = false }) => {
             `linear-gradient(30deg, ${t.colors.indigo[7]}, ${t.colors.indigo[5]})`
         }}
       />
+      {isOngoing && (
+        <div
+          sx={{
+            variant: 'text.caps',
+            position: 'absolute',
+            top: 2,
+            right: 2,
+            backgroundColor: 'rgba(0,0,0,.95)',
+            fontWeight: 'medium',
+            color: 'white',
+            fontSize: '0.675rem',
+            py: 1,
+            px: 2
+          }}
+        >
+          {t('ongoing')}
+        </div>
+      )}
     </animated.div>
   );
 };

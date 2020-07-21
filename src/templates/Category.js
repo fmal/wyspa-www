@@ -4,6 +4,8 @@ import { jsx, Heading, Container, Styled } from 'theme-ui';
 import { graphql } from 'gatsby';
 import { useTranslation } from 'react-i18next';
 import { useTrail, animated } from 'react-spring';
+import isFuture from 'date-fns/isFuture';
+import parseISO from 'date-fns/parseISO';
 
 import localize from '../components/localize';
 import SEO from '../components/SEO';
@@ -49,9 +51,9 @@ const Category = ({ data, pageContext }) => {
           <div
             sx={{
               display: 'grid',
-              gridTemplateColumns: [
+              gridTemplateColumns: theme => [
                 '1fr',
-                'repeat(auto-fill, minmax(350px, 1fr))'
+                `repeat(auto-fill, minmax(${theme.sizes.card}, 1fr))`
               ],
               gridColumnGap: 4
             }}
@@ -122,19 +124,22 @@ const Category = ({ data, pageContext }) => {
         <div
           sx={{
             display: 'grid',
-            gridTemplateColumns: [
+            gridTemplateColumns: theme => [
               '1fr',
-              'repeat(auto-fill, minmax(350px, 1fr))'
+              `repeat(auto-fill, minmax(${theme.sizes.card}, 1fr))`
             ],
             gridGap: 4
           }}
         >
           {trail.map((style, idx) => {
             const event = events.nodes[idx];
+            const date = event.endDateISO || event.startDateISO;
+            const isOngoing = date != null && isFuture(parseISO(date));
 
             return (
               <Card
                 isEventCard
+                isOngoing={isOngoing}
                 key={event.id}
                 title={event.title}
                 image={event.featured_image.localFile.childImageSharp.fluid}
@@ -200,6 +205,8 @@ export const query = graphql`
       totalCount
       nodes {
         id
+        startDateISO: start_date(formatString: "YYYY-MM-DD")
+        endDateISO: end_date(formatString: "YYYY-MM-DD")
         featured_image {
           localFile {
             childImageSharp {

@@ -11,5 +11,6 @@
   "previousPage": "Poprzednia strona",
   "nextPage": "Następna strona",
   "paginationLocation": "Strona {{currentPage}} z {{pageCount}}",
-  "backToHome": "Powrót na stronę główną"
+  "backToHome": "Powrót na stronę główną",
+  "readMore": "Czytaj więcej"
 }

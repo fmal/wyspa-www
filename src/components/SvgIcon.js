@@ -4,7 +4,7 @@ import { jsx, Box } from 'theme-ui';
 
 import uuid from '../utils/uuid';
 
-const SvgIcon = ({ size = 24, title, pathData, sx, ...props }) => {
+const SvgIcon = ({ size = 20, title, pathData, sx, ...props }) => {
   const viewBox = [0, 0, size, size].join(' ');
   const titleId = title ? `title-${uuid()}` : null;
 
@@ -31,6 +31,7 @@ const SvgIcon = ({ size = 24, title, pathData, sx, ...props }) => {
           pointerEvents: 'none'
         }}
         role={titleId ? 'img' : undefined}
+        focusable="false"
         aria-hidden={titleId == null ? true : undefined}
         viewBox={viewBox}
         aria-labelledby={titleId}

@@ -31,7 +31,11 @@ const SocialMediaLinks = ({ showIcons = false, ...props }) => {
             aria-label={link.title}
             sx={{ variant: 'links.social', ml: 3 }}
           >
-            <SvgIcon pathData={link.icon_path} sx={{ display: 'block' }} />
+            <SvgIcon
+              size={24}
+              pathData={link.icon_path}
+              sx={{ display: 'block' }}
+            />
           </Styled.a>
         ))}
       </Flex>

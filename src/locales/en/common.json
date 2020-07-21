@@ -11,5 +11,6 @@
   "previousPage": "Previous Page",
   "nextPage": "Next Page",
   "paginationLocation": "Page {{currentPage}} of {{pageCount}}",
-  "backToHome": "Back to homepage"
+  "backToHome": "Back to homepage",
+  "readMore": "Read more"
 }

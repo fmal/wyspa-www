@@ -83,9 +83,9 @@ const CategoryArchive = ({ data, pageContext }) => {
         <div
           sx={{
             display: 'grid',
-            gridTemplateColumns: [
+            gridTemplateColumns: theme => [
               '1fr',
-              'repeat(auto-fill, minmax(350px, 1fr))'
+              `repeat(auto-fill, minmax(${theme.sizes.card}, 1fr))`
             ],
             gridGap: 4
           }}

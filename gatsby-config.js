@@ -18,7 +18,6 @@ module.exports = {
     siteUrl: 'https://next.wyspa.iq.pl/'
   },
   plugins: [
-    'gatsby-plugin-postcss',
     {
       resolve: '@directus/gatsby-source-directus',
       options: {

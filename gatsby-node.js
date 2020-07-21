@@ -213,7 +213,7 @@ exports.createPages = async ({ graphql, actions }) => {
     buildHomePages(createPage),
     buildI18nPageDefinitions(
       categories.nodes,
-      ['common', 'category'],
+      ['common', 'category', 'event'],
       ({ slug, id }, language, i18n) => ({
         i18n,
         path: `/${language}/${i18n.t('common:categorySlug')}/${slug}`,

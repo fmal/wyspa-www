@@ -6,7 +6,7 @@ export default merge(tailwind, {
   colors: {
     text: tailwind.colors.gray[8],
     primary: tailwind.colors.indigo[7],
-    secondary: tailwind.colors.blue[7],
+    secondary: tailwind.colors.teal[6],
     background: tailwind.colors.gray[1],
     textMuted: tailwind.colors.gray[7],
     heading: tailwind.colors.black,
@@ -21,9 +21,11 @@ export default merge(tailwind, {
     bold: 775
   },
   sizes: {
-    container: 1600
+    card: '19rem',
+    col: '7rem',
+    container: '88rem'
   },
-  breakpoints: [...tailwind.breakpoints, '1595px'],
+  breakpoints: [...tailwind.breakpoints, '1562px'],
   layout: {
     container: {
       px: [3, 4],
@@ -40,7 +42,7 @@ export default merge(tailwind, {
       color: 'heading'
     },
     default: {
-      fontSize: [0, 0, 1]
+      fontSize: [0, null, 1]
     },
     body: {
       variant: 'text.default',
@@ -79,11 +81,15 @@ export default merge(tailwind, {
     },
     a: {
       color: 'primary',
-      textDecoration: 'none',
+      textDecoration: 'underline',
       transition: 'all 0.3s ease-in-out',
+      '&, &:focus, &:hover': {
+        textDecorationColor: tailwind.colors.indigo[2],
+        textDecorationSkip: 'ink',
+        textUnderlinePosition: 'under'
+      },
       '&:focus, &:hover': {
-        color: 'secondary',
-        textDecoration: 'underline'
+        color: 'secondary'
       }
     },
     p: {
@@ -121,29 +127,25 @@ export default merge(tailwind, {
     },
     h1: {
       variant: 'text.heading',
-      fontSize: [4, 5, 6],
+      fontSize: [3, 4, 5],
       my: 4
     },
     h2: {
       variant: 'text.heading',
-      fontSize: [3, 4, 5],
+      fontSize: [2, 3, 4],
       mt: 4,
       mb: '1.5rem'
     },
     h3: {
       variant: 'text.heading',
-      fontSize: [2, 3, 4],
+      fontSize: [1, 2, 3],
       mt: 4
     },
     h4: {
       variant: 'text.heading',
-      fontSize: [1, 2, 3]
-    },
-    h5: {
-      variant: 'text.heading',
       fontSize: 1
     },
-    h6: {
+    h5: {
       variant: 'text.heading',
       fontSize: 1,
       mb: 3
@@ -159,6 +161,16 @@ export default merge(tailwind, {
     },
     strong: {
       variant: 'text.bold'
+    },
+    blockquote: {
+      borderLeftColor: 'gray.4',
+      borderLeftStyle: 'solid',
+      borderLeftWidth: '6px',
+      mx: 0,
+      pl: 4,
+      p: {
+        fontStyle: 'italic'
+      }
     }
   }
 });

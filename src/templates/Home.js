@@ -29,7 +29,10 @@ const Home = ({ data }) => {
       <Container
         sx={{
           display: 'grid',
-          gridTemplateColumns: ['1fr', 'repeat(auto-fill, minmax(350px, 1fr))'],
+          gridTemplateColumns: theme => [
+            '1fr',
+            `repeat(auto-fill, minmax(${theme.sizes.card}, 1fr))`
+          ],
           gridGap: 4
         }}
       >
