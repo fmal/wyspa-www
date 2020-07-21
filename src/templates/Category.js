@@ -210,7 +210,7 @@ export const query = graphql`
         featured_image {
           localFile {
             childImageSharp {
-              fluid(maxWidth: 770) {
+              fluid(maxWidth: 720) {
                 ...GatsbyImageSharpFluid_withWebp
               }
             }
