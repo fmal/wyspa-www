@@ -52,6 +52,8 @@ const Home = ({ data }) => {
               key={category.id}
               title={category.name}
               image={image}
+              isExternal={category.is_external}
+              externalUrl={category.external_url}
               link={`/${t('common:categorySlug')}/${category.slug}`}
               style={style}
             />
@@ -87,6 +89,8 @@ export const query = graphql`
           name
           slug
         }
+        is_external
+        external_url
         lastEvent {
           featured_image {
             localFile {

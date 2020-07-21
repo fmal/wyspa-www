@@ -165,7 +165,9 @@ exports.createPages = async ({ graphql, actions }) => {
   } = await wrapper(
     graphql(`
       query StartupQuery {
-        categories: allDirectusCategory {
+        categories: allDirectusCategory(
+          filter: { is_external: { eq: false } }
+        ) {
           nodes {
             id
             translations {

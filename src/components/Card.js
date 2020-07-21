@@ -12,6 +12,8 @@ const Card = ({
   title,
   link,
   style,
+  externalUrl,
+  isExternal = false,
   isEventCard = false,
   isOngoing = false
 }) => {
@@ -52,8 +54,11 @@ const Card = ({
         <Img fluid={image} />
       </div>
       <Link
-        as={LocalizedLink}
-        to={link}
+        as={isExternal ? 'a' : LocalizedLink}
+        to={isExternal ? undefined : link}
+        href={isExternal ? externalUrl : undefined}
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noopener noreferrer' : undefined}
         sx={{
           position: 'absolute',
           top: 0,
