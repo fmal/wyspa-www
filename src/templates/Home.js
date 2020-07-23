@@ -12,12 +12,37 @@ import Header from '../components/HeaderHome';
 
 const Home = ({ data }) => {
   const {
-    allDirectusCategory: { nodes: categories = [] }
+    allDirectusCategory: { nodes: categories = [] },
+    directusAboutUs: aboutUsData,
+    directusArtLab: artLabData,
+    directusOnePercent: onePercentData
   } = data;
 
   const { t } = useTranslation('home');
 
-  const trail = useTrail(categories.length, {
+  const cardsData = [
+    {
+      id: aboutUsData.id,
+      name: t('aboutUs:title'),
+      link: `/${t('common:aboutUsSlug')}/`,
+      image: aboutUsData.image
+    },
+    {
+      id: artLabData.id,
+      name: t('artLab:title'),
+      link: `/${t('common:artLabSlug')}/`,
+      image: artLabData.image
+    },
+    ...categories,
+    {
+      id: onePercentData.id,
+      name: t('onePercent:title'),
+      link: `/${t('common:onePercentSlug')}/`,
+      image: onePercentData.image
+    }
+  ];
+
+  const trail = useTrail(cardsData.length, {
     from: { opacity: 0, transform: 'translate3d(0, 30px, 0)' },
     to: { opacity: 1, transform: 'translate3d(0, 0, 0)' }
   });
@@ -37,24 +62,28 @@ const Home = ({ data }) => {
         }}
       >
         {trail.map((style, idx) => {
-          const category = categories[idx];
+          const data = cardsData[idx];
 
           let image;
-          if (category.image != null) {
-            image = category.image.localFile.childImageSharp.fluid;
-          } else if (category.lastEvent != null) {
+          if (data.image != null) {
+            image = data.image.localFile.childImageSharp.fluid;
+          } else if (data.lastEvent != null) {
             image =
-              category.lastEvent.featured_image.localFile.childImageSharp.fluid;
+              data.lastEvent.featured_image.localFile.childImageSharp.fluid;
           }
 
           return (
             <Card
-              key={category.id}
-              title={category.name}
+              key={data.id}
+              title={data.name}
               image={image}
-              isExternal={category.is_external}
-              externalUrl={category.external_url}
-              link={`/${t('common:categorySlug')}/${category.slug}`}
+              isExternal={data.is_external}
+              externalUrl={data.external_url}
+              link={
+                data.link
+                  ? data.link
+                  : `/${t('common:categorySlug')}/${data.slug}`
+              }
               style={style}
             />
           );
@@ -100,6 +129,42 @@ export const query = graphql`
                   ...GatsbyImageSharpFluid_withWebp
                 }
               }
+            }
+          }
+        }
+      }
+    }
+    directusAboutUs {
+      id
+      image {
+        localFile {
+          childImageSharp {
+            fluid(maxWidth: 720) {
+              ...GatsbyImageSharpFluid_withWebp
+            }
+          }
+        }
+      }
+    }
+    directusArtLab {
+      id
+      image {
+        localFile {
+          childImageSharp {
+            fluid(maxWidth: 720) {
+              ...GatsbyImageSharpFluid_withWebp
+            }
+          }
+        }
+      }
+    }
+    directusOnePercent {
+      id
+      image {
+        localFile {
+          childImageSharp {
+            fluid(maxWidth: 720) {
+              ...GatsbyImageSharpFluid_withWebp
             }
           }
         }

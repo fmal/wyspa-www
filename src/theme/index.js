@@ -33,6 +33,7 @@ export default merge(tailwind, {
     },
     list: {
       mt: 2,
+      mb: '1.5rem',
       ml: 3,
       p: 0
     }
@@ -101,6 +102,7 @@ export default merge(tailwind, {
       variant: 'layout.list',
       listStyle: 'none',
       li: {
+        variant: 'text.default',
         mb: 1,
         '::before': {
           content: '"-"',
@@ -117,7 +119,8 @@ export default merge(tailwind, {
     ol: {
       variant: 'layout.list',
       li: {
-        mb: 3
+        variant: 'text.default',
+        mb: 2
       }
     },
     li: {

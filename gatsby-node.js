@@ -38,6 +38,9 @@ const templates = {
   event: path.resolve('src/templates/Event.js'),
   category: path.resolve('src/templates/Category.js'),
   categoryArchive: path.resolve('src/templates/CategoryArchive.js'),
+  aboutUs: path.resolve('src/templates/AboutUs.js'),
+  artLab: path.resolve('src/templates/ArtLab.js'),
+  onePercent: path.resolve('src/templates/OnePercent.js'),
   error: path.resolve('src/templates/404.js')
 };
 
@@ -90,13 +93,18 @@ const buildI18nPageDefinitions = async (
   );
 };
 
-const buildHomePages = async createPage => {
+const buildI18nPages = ({
+  template,
+  namespaces = [],
+  getSlug = () => ''
+} = {}) => async createPage => {
   const definitions = await Promise.all(
     allLanguages.map(async language => {
-      const i18n = await createI18nextInstance(language, ['common', 'home']);
+      const i18n = await createI18nextInstance(language, namespaces);
+      const slug = getSlug(i18n);
       const res = {
-        path: '/' + language,
-        component: templates.home,
+        path: `/${language}${slug !== '' ? `/${slug}` : ''}`,
+        component: template,
         context: {
           language,
           i18nResources: i18n.services.resourceStore.data
@@ -118,12 +126,32 @@ const buildHomePages = async createPage => {
   });
 };
 
+const buildHomePages = buildI18nPages({
+  template: templates.home,
+  namespaces: ['common', 'home', 'aboutUs', 'artLab', 'onePercent']
+});
+const buildAboutUsPages = buildI18nPages({
+  template: templates.aboutUs,
+  namespaces: ['common', 'aboutUs'],
+  getSlug: i18n => i18n.t('common:aboutUsSlug')
+});
+const buildArtLabPages = buildI18nPages({
+  template: templates.artLab,
+  namespaces: ['common', 'artLab'],
+  getSlug: i18n => i18n.t('common:artLabSlug')
+});
+const buildOnePercentPages = buildI18nPages({
+  template: templates.onePercent,
+  namespaces: ['common', 'onePercent'],
+  getSlug: i18n => i18n.t('common:onePercentSlug')
+});
+
 const build404Pages = async createPage => {
   await Promise.all(
     allLanguages.map(async (language, index) => {
       const i18n = await createI18nextInstance(language, ['common', 404]);
       const res = {
-        path: '/' + language + '/404',
+        path: `/${language}/404`,
         component: templates.error,
         context: {
           language,
@@ -213,6 +241,9 @@ exports.createPages = async ({ graphql, actions }) => {
 
   await Promise.all([
     buildHomePages(createPage),
+    buildAboutUsPages(createPage),
+    buildArtLabPages(createPage),
+    buildOnePercentPages(createPage),
     buildI18nPageDefinitions(
       categories.nodes,
       ['common', 'category', 'event'],

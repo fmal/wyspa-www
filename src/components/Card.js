@@ -93,6 +93,9 @@ const Card = ({
           '&:hover': {
             '&:after': {
               opacity: 0
+            },
+            "[data-name='card-link-text']": {
+              backgroundColor: 'indigo.8'
             }
           }
         }}
@@ -100,14 +103,25 @@ const Card = ({
         <Heading
           as="h2"
           sx={{
-            mr: 2,
+            [`m${isEventCard ? 'r' : 'l'}`]: 2,
+            textAlign: isEventCard ? 'left' : 'right',
             variant: isEventCard ? undefined : 'text.caps',
             fontSize: isEventCard ? [1, 2] : [2, 3],
             color: 'white',
             textShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 12px'
           }}
         >
-          {title}
+          <span
+            data-name="card-link-text"
+            sx={{
+              py: '0.0125em',
+              px: '0.125em',
+              boxDecorationBreak: 'clone',
+              transition: 'all .3s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}
+          >
+            {title}
+          </span>
         </Heading>
       </Link>
       <div
@@ -121,7 +135,7 @@ const Card = ({
           opacity: 0,
           transition: 'opacity 0.3s',
           backgroundImage: t =>
-            `linear-gradient(30deg, ${t.colors.indigo[7]}, ${t.colors.indigo[5]})`
+            `linear-gradient(30deg, ${t.colors.indigo[6]}, ${t.colors.indigo[3]})`
         }}
       />
       {isOngoing && (
