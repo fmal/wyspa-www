@@ -20,8 +20,8 @@ const OnePercent = ({ data }) => {
   const { directusOnePercent: page } = data;
 
   const titleProps = useSlideInDownAndFadeAnimation();
-  const fadeProps = useFadeAnimation({ delay: 500 });
-  const fadeDelayedProps = useFadeAnimation({ delay: 1000 });
+  const fadeProps = useFadeAnimation({ delay: 350 });
+  const fadePropsDelayed = useFadeAnimation({ delay: 700 });
 
   return (
     <React.Fragment>
@@ -70,11 +70,18 @@ const OnePercent = ({ data }) => {
               gridColumn: [null, '1 / -1', '1 / -2', '5 / -1', null, '6 / -1']
             }}
           >
-            <animated.div style={fadeDelayedProps}>
+            <animated.div style={fadePropsDelayed}>
               <Heading as="h2" sx={{ fontSize: [1, 2, 3], mb: 3 }}>
                 {t('reports')}
               </Heading>
-              <ul sx={{ listStyle: 'none', mb: '1.5rem', mt: 0, p: 0 }}>
+              <ul
+                sx={{
+                  listStyle: 'none',
+                  mb: theme => theme.sizes[6],
+                  mt: 0,
+                  p: 0
+                }}
+              >
                 {page.attachments.map(attachment => {
                   return (
                     <li

@@ -25,7 +25,7 @@ const EventInfoItem = ({ name, content }) => {
             pt: 2
           }
         },
-        mb: [3, null, '1.5rem']
+        mb: theme => [3, null, theme.sizes[6]]
       }}
     >
       <h2

@@ -33,7 +33,7 @@ export default merge(tailwind, {
     },
     list: {
       mt: 2,
-      mb: '1.5rem',
+      mb: tailwind.sizes[6],
       ml: 3,
       p: 0
     }
@@ -96,7 +96,7 @@ export default merge(tailwind, {
     p: {
       variant: 'text.body',
       m: 0,
-      mb: '1.5rem'
+      mb: tailwind.sizes[6]
     },
     ul: {
       variant: 'layout.list',
@@ -137,7 +137,7 @@ export default merge(tailwind, {
       variant: 'text.heading',
       fontSize: [2, 3, 4],
       mt: 4,
-      mb: '1.5rem'
+      mb: tailwind.sizes[6]
     },
     h3: {
       variant: 'text.heading',

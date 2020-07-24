@@ -20,7 +20,7 @@ const ArtLab = ({ data }) => {
   const { directusArtLab: page } = data;
 
   const titleProps = useSlideInDownAndFadeAnimation();
-  const fadeProps = useFadeAnimation({ delay: 500 });
+  const fadeProps = useFadeAnimation({ delay: 350 });
 
   return (
     <React.Fragment>
@@ -66,7 +66,11 @@ const ArtLab = ({ data }) => {
                 <Img
                   fixed={page.image.localFile.childImageSharp.fixed}
                   alt=""
-                  sx={{ float: [null, null, 'right'], ml: 3, mb: 3 }}
+                  sx={{
+                    float: [null, null, 'right'],
+                    ml: [null, null, 3],
+                    mb: 3
+                  }}
                 />
                 {/* eslint-disable-next-line react/no-danger */}
                 <div dangerouslySetInnerHTML={{ __html: page.body }} />

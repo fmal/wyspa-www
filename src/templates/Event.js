@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import React from 'react';
-import { graphql, Link } from 'gatsby';
+import { graphql } from 'gatsby';
 import { jsx, Container, Heading } from 'theme-ui';
 import { animated } from 'react-spring';
 import Img from 'gatsby-image';
@@ -27,7 +27,7 @@ const Event = ({ data, location }) => {
 
   const titleProps = useSlideInDownAndFadeAnimation();
   const eventMetaProps = useSlideInLeftAndFadeAnimation({ delay: 650 });
-  const fadeProps = useFadeAnimation({ delay: 500 });
+  const fadeProps = useFadeAnimation({ delay: 350 });
   const bodyExtraNode = React.useRef(null);
 
   return (
@@ -81,8 +81,7 @@ const Event = ({ data, location }) => {
               {event.body_extra && event.media.length > 0 && (
                 <ArrowLink
                   direction={ARROW_DIRECTION.BOTTOM}
-                  as={Link}
-                  to={`${location.pathname}#more`}
+                  href={`${location.pathname}#more`}
                   onClick={event => {
                     if (bodyExtraNode.current) {
                       event.preventDefault();
