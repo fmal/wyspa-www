@@ -7,7 +7,7 @@ const GoogleMap = ({ lat, lng, aspectRatio, sx, ...props }) => {
   return (
     <AspectRatio ratio={aspectRatio} sx={sx}>
       <GoogleMapReact
-        bootstrapURLKeys={{ key: process.env.GMAPS_API_KEY }}
+        bootstrapURLKeys={{ key: process.env.GATSBY_GMAPS_API_KEY }}
         defaultCenter={{
           lat,
           lng
