@@ -21,7 +21,7 @@ import {
   useFadeAnimation
 } from '../hooks/animations';
 
-const AboutUs = ({ data }) => {
+const AboutUs = ({ data, location }) => {
   const { t } = useTranslation('aboutUs');
   const { directusAboutUs: page, allDirectusStaff: staff } = data;
 
