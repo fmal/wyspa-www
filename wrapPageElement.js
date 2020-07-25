@@ -31,14 +31,14 @@ const wrapPageElement = ({ element, props }) => (
                 as="font"
                 type="font/woff2"
                 rel="preload"
-                crossOrigin
+                crossOrigin="anonymous"
               />
               <link
                 href={interItalicWoff2}
                 as="font"
                 type="font/woff2"
                 rel="preload"
-                crossOrigin
+                crossOrigin="anonymous"
               />
               <style>{interFontFaces}</style>
             </Helmet>

@@ -84,30 +84,29 @@ const LightBox = ({
       <Global
         styles={theme => ({
           '.ril-outer': {
-            background: alpha('background', 0.85)(theme)
-          },
-          '.ril__toolbarItem': {
-            color: theme.colors.text,
-            fontSize: theme.fontSizes[1]
-          },
-          [`@media screen and (min-width: ${theme.breakpoints[2]})`]: {
-            '.ril__toolbarItem': {
-              fontSize: theme.fontSizes[2]
-            }
-          },
-          '.ril-toolbar': {
-            background: 'transparent'
-          },
-          '.ril-close': {
-            filter: 'brightness(25%)',
+            background: `${alpha('background', 0.85)(theme)} !important`,
 
-            '&:focus': {
-              opacity: 1,
-              outline: 'none'
+            '.ril__toolbarItem': {
+              color: theme.colors.text,
+              fontSize: theme.fontSizes[1],
+              [`@media screen and (min-width: ${theme.breakpoints[2]})`]: {
+                fontSize: theme.fontSizes[2]
+              }
+            },
+            '.ril-toolbar': {
+              background: 'transparent'
+            },
+            '.ril-close': {
+              filter: 'brightness(25%)',
+
+              '&:focus': {
+                opacity: 1,
+                outline: 'none'
+              }
+            },
+            '.ril__navButtonNext, .ril__navButtonPrev': {
+              backgroundColor: alpha('gray.9', 0.4)(theme)
             }
-          },
-          '.ril__navButtonNext, .ril__navButtonPrev': {
-            backgroundColor: alpha('gray.9', 0.4)(theme)
           }
         })}
       />
