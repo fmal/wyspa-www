@@ -7,29 +7,31 @@ let portalContainer;
 
 const Portal = ({ children }) => {
   const isStatic = useIsStatic();
-  const element = React.useRef(
-    !isStatic ? document.createElement('div') : null
-  );
+  const element = React.useRef(null);
+  const [canRender, setRenderState] = React.useState(false);
 
   React.useEffect(() => {
     if (isStatic) {
       return;
     }
 
-    const { current } = element;
+    element.current = document.createElement('div');
+
     if (!portalContainer) {
       portalContainer = document.createElement('div');
       portalContainer.setAttribute('portal-container', '');
       document.body.append(portalContainer);
     }
-    portalContainer.append(current);
+    portalContainer.append(element.current);
+
+    setRenderState(true);
 
     return () => {
-      portalContainer.removeChild(current);
+      portalContainer.removeChild(element.current);
     };
-  }, [element, isStatic]);
+  }, [isStatic]);
 
-  if (isStatic) {
+  if (isStatic || !canRender) {
     return null;
   }
 
