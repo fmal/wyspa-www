@@ -1,8 +1,8 @@
 {
   "title": "Fundacja Wyspa Progress",
   "description": "Wyspa WWW.",
-  "pl": "Polski",
-  "en": "English",
+  "pl": "Po polsku",
+  "en": "In English",
   "language": "Język",
   "categorySlug": "kategoria",
   "eventSlug": "wydarzenie",
@@ -15,5 +15,14 @@
   "nextPage": "Następna strona",
   "paginationLocation": "Strona {{currentPage}} z {{pageCount}}",
   "backToHome": "Powrót na stronę główną",
-  "readMore": "Czytaj więcej"
+  "readMore": "Czytaj więcej",
+  "newsletter": {
+    "title": "Newsletter",
+    "body": "Tutaj możesz zapisać się na nasz newsletter, aby być na bieżąco z naszymi działaniami.",
+    "placeholder": "Twój adres email",
+    "submit": "Zapisz mnie",
+    "success": "Dziękujemy za zapis do naszego newslettera!",
+    "error": "Nie udało się zapisać na listę, spróbuj ponownie.",
+    "exists": "Podany email został już zasubskrybowany."
+  }
 }

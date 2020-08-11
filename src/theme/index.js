@@ -1,6 +1,22 @@
 import { merge } from 'theme-ui';
 import { tailwind } from '@theme-ui/presets';
 
+const sharedButtonStyles = {
+  variant: 'text.default',
+  border: 'none',
+  color: 'white',
+  cursor: 'pointer',
+  fontFamily: 'body',
+  fontWeight: 'body',
+  transition: 'all 0.3s ease-in-out',
+  '&:hover, &:focus': {
+    filter: 'saturate(1.5) brightness(1.2)'
+  },
+  '&:focus': {
+    outline: 'none'
+  }
+};
+
 export default merge(tailwind, {
   useCustomProperties: false,
   colors: {
@@ -10,7 +26,8 @@ export default merge(tailwind, {
     background: tailwind.colors.gray[1],
     textMuted: tailwind.colors.gray[7],
     heading: tailwind.colors.black,
-    muted: tailwind.colors.gray[3]
+    muted: tailwind.colors.gray[3],
+    shadow: tailwind.colors.indigo[2]
   },
   fonts: {
     body: `'Inter var', system-ui, -apple-system, sans-serif`
@@ -63,6 +80,44 @@ export default merge(tailwind, {
       fontFeatureSettings: `'kern', 'calt', 'cpsp', 'ss01', 'ss02', 'ss03'`
     }
   },
+  forms: {
+    input: {
+      px: [2, null, 3],
+      py: 2,
+      variant: 'text.default',
+      borderRadius: 'default',
+      boxShadow: 'sm',
+      borderWidth: '2px',
+      borderStyle: 'solid',
+      borderColor: 'gray.3',
+      lineHeight: 'snug',
+      '&:focus': {
+        outline: 'none',
+        borderColor: 'primary'
+      }
+    }
+  },
+  buttons: {
+    primary: {
+      ...sharedButtonStyles,
+      borderRadius: 'full',
+      boxShadow: 'default',
+      backgroundImage: t =>
+        `linear-gradient(15deg, ${t.colors.indigo[7]}, ${t.colors.indigo[5]})`,
+      px: 3,
+      py: 2
+    },
+    header: {
+      ...sharedButtonStyles,
+      backgroundImage: t =>
+        `linear-gradient(15deg, ${t.colors.gray[9]}, ${t.colors.gray[6]})`,
+      boxShadow: 'sm',
+      backgroundColor: 'text',
+      borderRadius: 'default',
+      px: 2,
+      py: 0
+    }
+  },
   links: {
     social: {
       color: 'text',
@@ -80,12 +135,15 @@ export default merge(tailwind, {
       boxSizing: 'border-box',
       fontFeatureSettings: `'kern', 'calt', 'ss01', 'ss02', 'ss03'`
     },
+    spinner: {
+      color: 'white'
+    },
     a: {
       color: 'primary',
       textDecoration: 'underline',
       transition: 'all 0.3s ease-in-out',
       '&, &:focus, &:hover': {
-        textDecorationColor: tailwind.colors.indigo[2],
+        textDecorationColor: t => t.colors.indigo[2],
         textDecorationSkip: 'ink',
         textUnderlinePosition: 'under'
       },
