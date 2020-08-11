@@ -71,3 +71,6 @@ yarn-error.log
 
 # keep .gitkeep files
 !.gitkeep
+
+# Local Netlify folder
+.netlify

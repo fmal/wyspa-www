@@ -4,6 +4,7 @@ import { animated } from 'react-spring';
 
 import SocialMediaLinks from './SocialMediaLinks';
 import LanguageSelector from './LanguageSelector';
+import NewsletterSignup from './NewsletterSignup';
 import Logo from './Logo';
 import {
   useFadeAnimation,
@@ -28,7 +29,8 @@ const Header = ({ children }) => {
             mt: [2, '2.5rem']
           }}
         >
-          <LanguageSelector sx={{ variant: 'text.default', mr: [2, 3] }} />
+          <LanguageSelector sx={{ mr: [3, 3, 4], fontSize: [0, null, 1] }} />
+          <NewsletterSignup />
           <SocialMediaLinks sx={{ fontSize: [1, 2, 3] }} showIcons />
         </animated.div>
         <div sx={{ mt: [5, 4], mb: [4, 3, null, 4] }}>

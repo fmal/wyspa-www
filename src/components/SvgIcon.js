@@ -4,7 +4,7 @@ import { jsx, Box } from 'theme-ui';
 
 import uuid from '../utils/uuid';
 
-const SvgIcon = ({ size = 20, title, pathData, sx, ...props }) => {
+const SvgIcon = ({ size = 20, title, pathData, sx, children, ...props }) => {
   const viewBox = [0, 0, size, size].join(' ');
   const titleId = title ? `title-${uuid()}` : null;
 
@@ -13,6 +13,7 @@ const SvgIcon = ({ size = 20, title, pathData, sx, ...props }) => {
       sx={{
         position: 'relative',
         display: 'inline-block',
+        flexShrink: 0,
         verticalAlign: 'middle',
         fill: 'currentColor',
         width: '1em',
@@ -37,7 +38,8 @@ const SvgIcon = ({ size = 20, title, pathData, sx, ...props }) => {
         aria-labelledby={titleId}
       >
         {titleId && <title id={titleId}>{title}</title>}
-        <path d={pathData} />
+        {pathData && <path d={pathData} />}
+        {children}
       </svg>
     </Box>
   );
@@ -46,7 +48,7 @@ const SvgIcon = ({ size = 20, title, pathData, sx, ...props }) => {
 SvgIcon.propTypes = {
   size: PropTypes.number,
   title: PropTypes.string,
-  pathData: PropTypes.string.isRequired
+  pathData: PropTypes.string
 };
 
 export default SvgIcon;

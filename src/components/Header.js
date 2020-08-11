@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import SocialMediaLinks from './SocialMediaLinks';
 import LanguageSelector from './LanguageSelector';
 import LocalizedLink from './LocalizedLink';
+import NewsletterSignup from './NewsletterSignup';
 import Logo from './Logo';
 import {
   useFadeAnimation,
@@ -31,7 +32,8 @@ const Header = ({ children }) => {
             mt: [2, 3, 4]
           }}
         >
-          <LanguageSelector sx={{ variant: 'text.default', mr: [2, 3] }} />
+          <LanguageSelector sx={{ mr: [3, 4], fontSize: [0, null, 1] }} />
+          <NewsletterSignup />
           <SocialMediaLinks sx={{ fontSize: [1, 2, 3] }} showIcons />
         </animated.div>
         <div sx={{ mt: [5, 2, '1.25rem'], mb: [3, 2, null, 3] }}>

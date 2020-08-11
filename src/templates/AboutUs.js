@@ -155,7 +155,7 @@ const AboutUs = ({ data, location }) => {
                       </div>
                     )}
                     <div sx={{ flexGrow: 1 }}>
-                      <Heading as="h3">
+                      <Heading as="h3" sx={{ fontSize: 1 }}>
                         {personData.first_name} {personData.last_name}
                       </Heading>
                       <p

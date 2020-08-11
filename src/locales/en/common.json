@@ -1,8 +1,8 @@
 {
   "title": "Wyspa Progress Foundation",
   "description": "Wyspa WWW.",
-  "pl": "Polish",
-  "en": "English",
+  "pl": "Po polsku",
+  "en": "In English",
   "language": "Language",
   "categorySlug": "category",
   "eventSlug": "event",
@@ -15,5 +15,14 @@
   "nextPage": "Next Page",
   "paginationLocation": "Page {{currentPage}} of {{pageCount}}",
   "backToHome": "Back to homepage",
-  "readMore": "Read more"
+  "readMore": "Read more",
+  "newsletter": {
+    "title": "Newsletter",
+    "body": "If you want to stay up-to-date on what we're doing, subscribe!",
+    "placeholder": "Your email address",
+    "submit": "Sign up",
+    "success": "You are now subscribed to our newsletter!",
+    "error": "Failed to subscribe, please try again.",
+    "exists": "The email you entered is already subscribed."
+  }
 }
