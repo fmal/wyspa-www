@@ -67,6 +67,8 @@
     "start": "netlify dev",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
+    "deploy:draft": "netlify deploy --dir=public --functions=functions",
+    "deploy:prod": "netlify deploy --dir=public --functions=functions --prod",
     "deps": "npm-check -u",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
