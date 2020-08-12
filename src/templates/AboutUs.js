@@ -5,13 +5,13 @@ import { graphql } from 'gatsby';
 import { useTranslation } from 'react-i18next';
 import { useTrail, animated } from 'react-spring';
 import Img from 'gatsby-image';
-import Obfuscate from 'react-obfuscate';
 
 import localize from '../components/localize';
 import SEO from '../components/SEO';
 import Header from '../components/Header';
 import Copy from '../components/Copy';
 import Section from '../components/Section';
+import ObfuscateEmail from '../components/ObfuscateEmail';
 import GoogleMap from '../components/GoogleMap';
 import ArrowLink, {
   DIRECTION as ARROW_DIRECTION
@@ -177,12 +177,11 @@ const AboutUs = ({ data, location }) => {
                     />
                   )}
                   {personData.email && (
-                    <p sx={{ variant: 'styles.p' }}>
-                      <Obfuscate
-                        sx={{ variant: 'styles.a' }}
-                        email={personData.email}
-                      />
-                    </p>
+                    <ObfuscateEmail
+                      email={personData.email}
+                      as="p"
+                      sx={{ variant: 'styles.p' }}
+                    />
                   )}
                 </animated.div>
               );
@@ -210,9 +209,11 @@ const AboutUs = ({ data, location }) => {
             <div sx={{ gridRow: ['1', null, '1 / 1'] }}>
               <animated.div style={fadeProps}>
                 <Copy dangerouslySetInnerHTML={{ __html: page.contact }} />
-                <p sx={{ variant: 'styles.p' }}>
-                  <Obfuscate sx={{ variant: 'styles.a' }} email={page.email} />
-                </p>
+                <ObfuscateEmail
+                  email={page.email}
+                  as="p"
+                  sx={{ variant: 'styles.p' }}
+                />
               </animated.div>
             </div>
           </div>
