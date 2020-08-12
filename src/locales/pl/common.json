@@ -15,6 +15,7 @@
   "nextPage": "Następna strona",
   "paginationLocation": "Strona {{currentPage}} z {{pageCount}}",
   "backToHome": "Powrót na stronę główną",
+  "backToTop": "Powrót do góry",
   "readMore": "Czytaj więcej",
   "newsletter": {
     "title": "Newsletter",

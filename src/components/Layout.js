@@ -12,6 +12,7 @@ import { Global } from '@emotion/core';
 import { jsx } from 'theme-ui';
 
 import Footer from './Footer';
+import BackToTop from './BackToTop';
 
 const Layout = ({ children }) => {
   return (
@@ -55,6 +56,7 @@ const Layout = ({ children }) => {
         {children}
       </div>
       <Footer />
+      <BackToTop />
     </React.Fragment>
   );
 };
