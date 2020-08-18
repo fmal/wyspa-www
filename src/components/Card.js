@@ -51,7 +51,7 @@ const Card = ({
           }
         }}
       >
-        <Img fluid={image} />
+        {image && <Img fluid={image} />}
       </div>
       <Link
         as={isExternal ? 'a' : LocalizedLink}

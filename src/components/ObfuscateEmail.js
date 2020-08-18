@@ -26,6 +26,7 @@ const ObfuscateEmail = ({ email, sx, ...props }) => {
       />
       <SvgIcon
         data-name="email-icon"
+        as="span"
         sx={{
           position: 'absolute',
           left: 0,

@@ -12,21 +12,32 @@ const BackToTop = () => {
   const isStatic = useIsStatic();
   const { t } = useTranslation('common');
 
-  const handleObserverEvent = entries => {
-    entries.forEach(({ isIntersecting }) => {
-      setIsShown(!isIntersecting);
-    });
-  };
-
   React.useEffect(() => {
     if (isStatic || !('IntersectionObserver' in window)) {
       return;
     }
 
-    const newObserver = new IntersectionObserver(handleObserverEvent, {
-      threshold: 0
-    });
-    newObserver.observe(observerRef.current);
+    let didCancel = false;
+    const currentObserverRef = observerRef.current;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(({ isIntersecting }) => {
+          if (!didCancel) {
+            setIsShown(!isIntersecting);
+          }
+        });
+      },
+      {
+        threshold: 0
+      }
+    );
+    observer.observe(currentObserverRef);
+
+    return () => {
+      didCancel = true;
+      observer.unobserve(currentObserverRef);
+    };
   }, [isStatic]);
 
   if (isStatic) {

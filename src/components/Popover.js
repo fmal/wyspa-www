@@ -45,11 +45,16 @@ const Popover = ({
 
   const handleClickOutside = React.useCallback(
     e => {
-      if (!popperElement?.contains(e.target)) {
+      if (
+        popperElement &&
+        referenceElement &&
+        !popperElement.contains(e.target) &&
+        !referenceElement.contains(e.target)
+      ) {
         setIsOpen(false);
       }
     },
-    [popperElement]
+    [popperElement, referenceElement]
   );
 
   React.useEffect(() => {
