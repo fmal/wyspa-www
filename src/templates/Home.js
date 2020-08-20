@@ -12,11 +12,13 @@ import Header from '../components/HeaderHome';
 
 const Home = ({ data }) => {
   const {
-    allDirectusCategory: { nodes: categories = [] },
     directusAboutUs: aboutUsData,
     directusArtLab: artLabData,
     directusOnePercent: onePercentData
   } = data;
+  const [categoriesGroup, archiveCategoriesGroup] = data.categoryGroup.group;
+  const categories = categoriesGroup?.nodes;
+  const archiveCategories = archiveCategoriesGroup?.nodes;
 
   const { t } = useTranslation('home');
 
@@ -39,7 +41,8 @@ const Home = ({ data }) => {
       name: t('onePercent:title'),
       link: `/${t('common:onePercentSlug')}/`,
       image: onePercentData.image
-    }
+    },
+    ...(archiveCategories != null ? archiveCategories : [])
   ];
 
   const trail = useTrail(cardsData.length, {
@@ -95,38 +98,42 @@ const Home = ({ data }) => {
 
 export const query = graphql`
   query CategoriesQuery($language: String!) {
-    allDirectusCategory(
+    categoryGroup: allDirectusCategory(
       sort: { fields: [order, created_date], order: [ASC, DESC] }
       filter: {
         show_on_home: { eq: true }
         translations: { elemMatch: { language: { eq: $language } } }
       }
     ) {
-      nodes {
-        id
-        image {
-          localFile {
-            childImageSharp {
-              fluid(maxWidth: 720) {
-                ...GatsbyImageSharpFluid_withWebp
-              }
-            }
-          }
-        }
-        translations {
-          language
-          name
-          slug
-        }
-        is_external
-        external_url
-        lastEvent {
-          featured_image {
+      group(field: is_archive) {
+        isArchive: fieldValue
+        nodes {
+          id
+          image {
             localFile {
-              id
               childImageSharp {
                 fluid(maxWidth: 720) {
                   ...GatsbyImageSharpFluid_withWebp
+                }
+              }
+            }
+          }
+          translations {
+            language
+            name
+            slug
+          }
+          is_external
+          is_archive
+          external_url
+          lastEvent {
+            featured_image {
+              localFile {
+                id
+                childImageSharp {
+                  fluid(maxWidth: 720) {
+                    ...GatsbyImageSharpFluid_withWebp
+                  }
                 }
               }
             }
