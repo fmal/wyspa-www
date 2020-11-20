@@ -15,13 +15,13 @@ const { tailwind } = require('@theme-ui/presets');
 module.exports = {
   siteMetadata: {
     author: '@gatsbyjs',
-    siteUrl: 'https://next.wyspa.iq.pl/'
+    siteUrl: 'https://wyspaart.pl/'
   },
   plugins: [
     {
       resolve: '@directus/gatsby-source-directus',
       options: {
-        url: 'https://api.wyspa.iq.pl',
+        url: 'https://api.wyspaart.pl',
         project: 'wyspa-www',
         auth: {
           token: process.env.DIRECTUS_API_TOKEN
