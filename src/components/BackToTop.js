@@ -3,17 +3,17 @@ import { jsx, Button } from 'theme-ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useIsStatic } from '../providers/IsStatic';
+import { useHasMounted } from '../providers/HasMounted';
 import SvgIcon from './SvgIcon';
 
 const BackToTop = () => {
   const [isShown, setIsShown] = React.useState(false);
   const observerRef = React.useRef(null);
-  const isStatic = useIsStatic();
+  const hasMounted = useHasMounted();
   const { t } = useTranslation('common');
 
   React.useEffect(() => {
-    if (isStatic || !('IntersectionObserver' in window)) {
+    if (!hasMounted || !('IntersectionObserver' in window)) {
       return;
     }
 
@@ -38,9 +38,9 @@ const BackToTop = () => {
       didCancel = true;
       observer.unobserve(currentObserverRef);
     };
-  }, [isStatic]);
+  }, [hasMounted]);
 
-  if (isStatic) {
+  if (!hasMounted) {
     return null;
   }
 

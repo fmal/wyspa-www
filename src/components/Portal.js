@@ -1,17 +1,17 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 
-import { useIsStatic } from '../providers/IsStatic';
+import { useHasMounted } from '../providers/HasMounted';
 
 let portalContainer;
 
 const Portal = ({ children }) => {
-  const isStatic = useIsStatic();
+  const hasMounted = useHasMounted();
   const element = React.useRef(null);
   const [canRender, setRenderState] = React.useState(false);
 
   React.useEffect(() => {
-    if (isStatic) {
+    if (!hasMounted) {
       return;
     }
 
@@ -29,9 +29,9 @@ const Portal = ({ children }) => {
     return () => {
       portalContainer.removeChild(element.current);
     };
-  }, [isStatic]);
+  }, [hasMounted]);
 
-  if (isStatic || !canRender) {
+  if (!hasMounted || !canRender) {
     return null;
   }
 

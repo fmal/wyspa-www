@@ -1,9 +1,9 @@
-import { useIsStatic } from '../providers/IsStatic';
+import { useHasMounted } from '../providers/HasMounted';
 
 function ClientOnly({ children }) {
-  const isStatic = useIsStatic();
+  const hasMounted = useHasMounted();
 
-  if (isStatic) {
+  if (!hasMounted) {
     return null;
   }
 
