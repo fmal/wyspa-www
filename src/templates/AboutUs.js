@@ -87,7 +87,7 @@ const AboutUs = ({ data, location }) => {
                 {/* eslint-disable-next-line react/no-danger */}
                 <div dangerouslySetInnerHTML={{ __html: page.body }} />
               </Copy>
-              <p sx={{ variant: 'styles.p' }}>
+              <p sx={{ variant: 'styles.p', mt: 4 }}>
                 <ArrowLink
                   direction={ARROW_DIRECTION.BOTTOM}
                   href={`${location.pathname}#contact`}

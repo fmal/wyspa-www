@@ -142,7 +142,7 @@ const Category = ({ data, pageContext }) => {
                 isOngoing={isOngoing}
                 key={event.id}
                 title={event.title}
-                image={event.featured_image.localFile.childImageSharp.fluid}
+                image={event?.featured_image?.localFile?.childImageSharp?.fluid}
                 link={`/${t('common:eventSlug')}/${event.slug}`}
                 style={style}
               />
