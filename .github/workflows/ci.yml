@@ -60,6 +60,7 @@ jobs:
           DIRECTUS_API_TOKEN: ${{ secrets.DIRECTUS_API_TOKEN }}
           GATSBY_ACTIVE_ENV: ${{ contains(github.ref, 'master') && 'production' || 'staging'}}
           GATSBY_GMAPS_API_KEY: ${{ secrets.GMAPS_API_KEY }}
+          GATSBY_CONCURRENT_DOWNLOAD: 1
 
       - name: Deploy preview site
         if: github.ref != 'refs/heads/master'
